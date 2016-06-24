@@ -1,49 +1,12 @@
-import bson
 import time
 from error import Error
 from flask import Flask, request, jsonify
-from flask_mongoengine import MongoEngine
 from mongoengine.queryset import DoesNotExist
-
-db = MongoEngine()
+from models import db, Attendee
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db.init_app(app)
-
-
-class Scenario(db.EmbeddedDocument):
-    order = db.IntField()
-    available_time = db.IntField()
-    expire_time = db.IntField()
-    used = db.IntField()
-    disabled = db.StringField()
-    attr = db.DictField()
-
-
-class Attendee(db.Document):
-    token = db.StringField(unique=True)
-    user_id = db.StringField()
-    scenario = db.DictField()
-
-    meta = {
-        'indexes': [
-            'token'
-        ]
-    }
-
-    def to_json(self):
-        data = self.to_mongo()
-
-        scenarios = []
-        for k, v in data['scenario'].items():
-            v.pop('_cls')
-            v['id'] = k
-            scenarios.append(v)
-
-        data.pop('scenario')
-        data['scenarios'] = sorted(scenarios, key=lambda k: k['order'])
-        return bson.json_util.dumps(data)
 
 
 def get_attendee(request):
