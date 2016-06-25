@@ -90,3 +90,5 @@ ENV/
 
 # Config file
 config.py
+
+reg.csv
