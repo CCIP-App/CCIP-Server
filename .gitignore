@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Editor tempopary files
+*.sw[op]
+*~
+
 # C extensions
 *.so
 
