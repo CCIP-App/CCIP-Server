@@ -10,9 +10,8 @@ db.init_app(app)
 def str2timestamp(str):
     return datetime.strptime(str, "%Y/%m/%d %H:%M").timestamp()
 
-with open('reg.csv', 'r') as csvfile:
-    for row in csv.reader(csvfile):
-        print(row)
+def list_import(attendee_list):
+    for row in attendee_list:
         attendee = Attendee()
         attendee.token = row[0]
         attendee.user_id = row[1]
@@ -56,3 +55,11 @@ with open('reg.csv', 'r') as csvfile:
         attendee.scenario['day2lunch'] = sce5
 
         attendee.save()
+
+def from_csv(csv_file): list_import(csv.reader(csv_file))
+
+if __name__ == '__main__':
+    import sys
+    filename = sys.argv[1]
+    with open(filename, 'r') as csv_file:
+        from_csv(csv_file)
