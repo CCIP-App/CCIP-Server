@@ -44,10 +44,13 @@ def use(scenario_id):
     except KeyError:
         raise Error("invalid scenario_id")
 
-    if scenario.used is not None:
-        raise Error("has been used")
+    if scenario.available_time <= time.time() and scenario.expire_time > time.time():
+        if scenario.used is not None:
+            raise Error("has been used")
 
-    scenario.used = time.time()
-    attendee.save()
+        scenario.used = time.time()
+        attendee.save()
 
-    return attendee.to_json()
+        return attendee.to_json()
+    else:
+        raise Error("link expired/not available now")
