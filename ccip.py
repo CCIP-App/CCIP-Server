@@ -48,6 +48,9 @@ def use(scenario_id):
         if scenario.used is not None:
             raise Error("has been used")
 
+        if scenario.disabled is not None:
+            raise Error("disabled scenario")
+
         scenario.used = time.time()
         attendee.save()
 
