@@ -1,13 +1,20 @@
 import time
 from error import Error
-from flask import Flask, request, jsonify
+from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
+from functools import wraps
 from models import db, Attendee
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db.init_app(app)
 
+def returns_json(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        r = f(*args, **kwargs)
+        return Response(r, content_type='application/json; charset=utf-8')
+    return decorated_function
 
 def get_attendee(request):
     token = request.args.get('token')
