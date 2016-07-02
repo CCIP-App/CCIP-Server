@@ -20,20 +20,23 @@ def list_import(attendee_list):
         sce1.order = 1
         sce1.available_time = str2timestamp("2016/08/20 8:30")
         sce1.expire_time = str2timestamp("2016/08/20 15:00")
+        sce1.countdown = 0
         attendee.scenario['day1checkin'] = sce1
 
         sce2 = Scenario()
         sce2.order = 2
         sce2.available_time = str2timestamp("2016/08/20 8:30")
         sce2.expire_time = str2timestamp("2016/08/20 15:00")
+        sce2.countdown = 60
         attendee.scenario['kit'] = sce2
 
         sce3 = Scenario()
         sce3.order = 3
         sce3.available_time = str2timestamp("2016/08/20 11:30")
         sce3.expire_time = str2timestamp("2016/08/20 14:00")
+        sce3.countdown = 60
         if row[2] == '葷':
-            sce3.attr = {"diet": "hunsi"}
+            sce3.attr = {"diet": "meat"}
         else:
             sce3.attr = {"diet": "vegetarian"}
         attendee.scenario['day1lunch'] = sce3
@@ -42,14 +45,16 @@ def list_import(attendee_list):
         sce4.order = 4
         sce4.available_time = str2timestamp("2016/08/21 8:30")
         sce4.expire_time = str2timestamp("2016/08/21 15:00")
+        sce4.countdown = 0
         attendee.scenario['day2checkin'] = sce4
 
         sce5 = Scenario()
         sce5.order = 5
         sce5.available_time = str2timestamp("2016/08/21 11:30")
         sce5.expire_time = str2timestamp("2016/08/21 14:00")
+        sce5.countdown = 60
         if row[2] == '素':
-            sce5.attr = {"diet": "hunsi"}
+            sce5.attr = {"diet": "meat"}
         else:
             sce5.attr = {"diet": "vegetarian"}
         attendee.scenario['day2lunch'] = sce5
