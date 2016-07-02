@@ -38,11 +38,13 @@ def handle_error(error):
 
 
 @app.route('/status')
+@returns_json
 def status():
     return get_attendee(request).to_json()
 
 
 @app.route('/use/<scenario_id>')
+@returns_json
 def use(scenario_id):
     attendee = get_attendee(request)
 
