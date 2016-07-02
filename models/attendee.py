@@ -8,6 +8,7 @@ class Scenario(db.EmbeddedDocument):
     expire_time = db.IntField()
     used = db.IntField()
     disabled = db.StringField()
+    countdown = db.IntField()
     attr = db.DictField()
 
 
