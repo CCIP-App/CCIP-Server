@@ -9,6 +9,9 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db.init_app(app)
 
+def str2timestamp(str):
+        return datetime.strptime(str, "%Y/%m/%d %H:%M").timestamp()
+
 def returns_json(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -59,6 +62,10 @@ def use(scenario_id):
 
         if scenario.disabled is not None:
             raise Error("disabled scenario")
+
+        if scenario_id in ("day1checkin", "day2checkin"):
+            if time.time() > scenario.available_time + 5400:
+                attendee.scenario[{'day1checkin': 'day1lunch', 'day2checkin': 'day2lunch'}.get(scenario_id)].disabled = "too late"
 
         scenario.used = time.time()
         attendee.save()
