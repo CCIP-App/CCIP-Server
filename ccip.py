@@ -73,3 +73,15 @@ def use(scenario_id):
         return attendee.to_json()
     else:
         raise Error("link expired/not available now")
+
+@app.route('/dashboard')
+def dashboard():
+    res = {}
+    res['total'] = Attendee.objects().count()
+    res['day1checkin_used'] = Attendee.objects(scenario__day1checkin__used__ne=None).count()
+    res['kit_used'] = Attendee.objects(scenario__kit__used__ne=None).count()
+    res['day1lunch_used'] = Attendee.objects(scenario__day1lunch__used__ne=None).count()
+    res['day2checkin_used'] = Attendee.objects(scenario__day2checkin__used__ne=None).count()
+    res['day2lunch_used'] = Attendee.objects(scenario__day2lunch__used__ne=None).count()
+
+    return jsonify(res)
