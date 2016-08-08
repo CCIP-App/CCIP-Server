@@ -3,7 +3,7 @@ from error import Error
 from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
-from models import db, Attendee
+from models import db, Attendee, Announcement
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -73,6 +73,20 @@ def use(scenario_id):
         return attendee.to_json()
     else:
         raise Error("link expired/not available now")
+
+@app.route('/announcement', methods=['GET', 'POST'])
+def announcement():
+    if request.method == 'GET':
+        return jsonify(Announcement.objects().order_by('-_id'))
+    if request.method == 'POST':
+        announcement = Announcement()
+        announcement.datetime = time.time()
+        announcement.msg_zh = request.form['msg_zh']
+        announcement.msg_en = request.form['msg_en']
+        announcement.uri = request.form['uri']
+        announcement.save()
+
+        return jsonify({'status': 'OK'})
 
 @app.route('/dashboard')
 def dashboard():
