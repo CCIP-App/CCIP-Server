@@ -64,8 +64,19 @@ def list_import(attendee_list):
 def staff_import(attendee_list):
     for row in attendee_list:
         attendee = Attendee()
-        attendee.token = "staff_" + row['id']
-        attendee.user_id = row['username']
+        attendee.token = row['username']
+        attendee.user_id = row['display_name']
+        teams = row['groups'].split(',')
+
+        try:
+            teams.remove('工作人員')
+            teams.remove('組長')
+            teams.remove('股長')
+        except ValueError:
+            pass
+
+        attendee.attr['teams'] = teams
+        attendee.attr['title'] = row['title']
 
         sce1 = Scenario()
         sce1.order = 1
