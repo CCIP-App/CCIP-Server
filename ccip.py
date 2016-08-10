@@ -83,7 +83,7 @@ def use(scenario_id):
         scenario.used = time.time()
         attendee.save()
 
-        return attendee.to_json()
+        return get_attendee(request).to_json()
     else:
         raise Error("link expired/not available now")
 
