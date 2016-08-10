@@ -62,6 +62,13 @@ def list_import(attendee_list):
             sce5.attr = {"diet": "vegetarian"}
         attendee.scenario['day2lunch'] = sce5
 
+        sce6 = Scenario()
+        sce6.order = 6
+        sce6.available_time = str2timestamp("2016/08/20 8:30")
+        sce6.expire_time = str2timestamp("2016/08/20 15:00")
+        sce6.countdown = 60
+        attendee.scenario['vipkit'] = sce6
+
         attendee.save()
 
 def staff_import(attendee_list):
@@ -124,6 +131,13 @@ def staff_import(attendee_list):
         else:
             sce5.attr = {"diet": "vegetarian"}
         attendee.scenario['day2lunch'] = sce5
+
+        sce6 = Scenario()
+        sce6.order = 6
+        sce6.available_time = str2timestamp("2016/08/20 8:30")
+        sce6.expire_time = str2timestamp("2016/08/20 15:00")
+        sce6.countdown = 60
+        attendee.scenario['vipkit'] = sce6
 
         attendee.save()
 
