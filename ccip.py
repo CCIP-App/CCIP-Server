@@ -63,9 +63,22 @@ def use(scenario_id):
         if scenario.disabled is not None:
             raise Error("disabled scenario")
 
-        if scenario_id in ("day1checkin", "day2checkin"):
+        if scenario_id == "day1checkin":
             if time.time() > scenario.available_time + 5400:
-                attendee.scenario[{'day1checkin': 'day1lunch', 'day2checkin': 'day2lunch'}.get(scenario_id)].disabled = "too late"
+                attendee.scenario['day1lunch'].disabled = "too late to check-in"
+            else:
+                attendee.scenario['day1lunch'].disabled = None
+
+            attendee.scenario['kit'].disabled = None
+        elif scenario_id == "day2checkin":
+            if time.time() > scenario.available_time + 5400:
+                attendee.scenario['day2lunch'].disabled = "too late to check-in"
+            else:
+                attendee.scenario['day2lunch'].disabled = None
+
+            if not attendee.scenario['kit'].used:
+                attendee.scenario['kit'].disabled = None
+
 
         scenario.used = time.time()
         attendee.save()
