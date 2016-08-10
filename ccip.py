@@ -107,8 +107,20 @@ def dashboard():
     res['total'] = Attendee.objects().count()
     res['day1checkin_used'] = Attendee.objects(scenario__day1checkin__used__ne=None).count()
     res['kit_used'] = Attendee.objects(scenario__kit__used__ne=None).count()
-    res['day1lunch_used'] = Attendee.objects(scenario__day1lunch__used__ne=None).count()
+    res['day1lunch'] = {
+        'total': Attendee.objects(scenario__day1lunch__disabled=None).count(),
+        'meat': Attendee.objects(scenario__day1lunch__attr__diet="meat", scenario__day1lunch__disabled=None).count(),
+        'vegetarian': Attendee.objects(scenario__day1lunch__attr__diet="vegetarian", scenario__day1lunch__disabled=None).count(),
+        'meat_used': Attendee.objects(scenario__day1lunch__attr__diet="meat", scenario__day1lunch__used__ne=None).count(),
+        'vegetarian_used': Attendee.objects(scenario__day1lunch__attr__diet="vegetarian", scenario__day1lunch__used__ne=None).count(),
+    }
     res['day2checkin_used'] = Attendee.objects(scenario__day2checkin__used__ne=None).count()
-    res['day2lunch_used'] = Attendee.objects(scenario__day2lunch__used__ne=None).count()
+    res['day2lunch'] = {
+        'total': Attendee.objects(scenario__day2lunch__disabled=None).count(),
+        'meat': Attendee.objects(scenario__day2lunch__attr__diet="meat", scenario__day2lunch__disabled=None).count(),
+        'vegetarian': Attendee.objects(scenario__day2lunch__attr__diet="vegetarian", scenario__day2lunch__disabled=None).count(),
+        'meat_used': Attendee.objects(scenario__day2lunch__attr__diet="meat", scenario__day2lunch__used__ne=None).count(),
+        'vegetarian_used': Attendee.objects(scenario__day2lunch__attr__diet="vegetarian", scenario__day2lunch__used__ne=None).count(),
+    }
 
     return jsonify(res)
