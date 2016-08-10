@@ -65,14 +65,14 @@ def use(scenario_id):
 
         if scenario_id == "day1checkin":
             if time.time() > scenario.available_time + 5400:
-                attendee.scenario['day1lunch'].disabled = "too late to check-in"
+                attendee.scenario['day1lunch'].disabled = "Too late to check-in"
             else:
                 attendee.scenario['day1lunch'].disabled = None
 
             attendee.scenario['kit'].disabled = None
         elif scenario_id == "day2checkin":
             if time.time() > scenario.available_time + 5400:
-                attendee.scenario['day2lunch'].disabled = "too late to check-in"
+                attendee.scenario['day2lunch'].disabled = "Too late to check-in"
             else:
                 attendee.scenario['day2lunch'].disabled = None
 
