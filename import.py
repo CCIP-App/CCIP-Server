@@ -100,6 +100,7 @@ def staff_import(attendee_list):
         sce2.order = 2
         sce2.available_time = str2timestamp("2016/08/20 8:30")
         sce2.expire_time = str2timestamp("2016/08/20 15:00")
+        sce2.disabled = "haven't check-in"
         sce2.countdown = 60
         sce2.attr['shirt_size'] = row['shirt_size']
         attendee.scenario['kit'] = sce2
@@ -108,6 +109,7 @@ def staff_import(attendee_list):
         sce3.order = 3
         sce3.available_time = str2timestamp("2016/08/20 11:30")
         sce3.expire_time = str2timestamp("2016/08/20 14:00")
+        sce3.disabled = "haven't check-in"
         sce3.countdown = 60
         if row['diet'] == '葷':
             sce3.attr = {"diet": "meat"}
@@ -126,6 +128,7 @@ def staff_import(attendee_list):
         sce5.order = 5
         sce5.available_time = str2timestamp("2016/08/21 11:30")
         sce5.expire_time = str2timestamp("2016/08/21 14:00")
+        sce5.disabled = "haven't check-in"
         sce5.countdown = 60
         if row['diet'] == '葷':
             sce5.attr = {"diet": "meat"}
