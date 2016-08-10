@@ -53,7 +53,7 @@ def list_import(attendee_list):
         sce5.available_time = str2timestamp("2016/08/21 11:30")
         sce5.expire_time = str2timestamp("2016/08/21 14:00")
         sce5.countdown = 60
-        if row[2] == '素':
+        if row[2] == '葷':
             sce5.attr = {"diet": "meat"}
         else:
             sce5.attr = {"diet": "vegetarian"}
