@@ -132,5 +132,6 @@ def dashboard():
         'total': Attendee.objects(scenario__vipkit__disabled=None).count(),
         'used': Attendee.objects(scenario__vipkit__used__ne=None).count()
     }
+    res['logged'] = Attendee.objects(status=True).count()
 
     return jsonify(res)
