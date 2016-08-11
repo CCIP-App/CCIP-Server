@@ -32,18 +32,6 @@ def get_attendee(request):
 
     return attendee
 
-def get_nickname(request):
-    token = request.args.get('token')
-
-    if token is None:
-        raise Error("token required")
-    try:
-        nickname = Attendee.objects(token=token).get('user_id')
-    except DoesNotExist:
-        raise Error("invalid token")
-
-    return nickname
-
 @app.errorhandler(Error)
 def handle_error(error):
     response = jsonify(error.to_dict())
@@ -51,11 +39,10 @@ def handle_error(error):
     return response
 
 @app.route('/landing')
-@returns_json
 def landing():
-    nickname = get_nickname(request)
+    attendee = get_attendee(request)
 
-    return nickname.to_json()
+    return jsonify({"nickname": attendee.user_id})
 
 @app.route('/status')
 @returns_json
