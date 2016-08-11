@@ -23,7 +23,7 @@ def get_attendee(request):
     token = request.args.get('token')
 
     if token is None:
-        raise Error("token require")
+        raise Error("token required")
 
     try:
         attendee = Attendee.objects(token=token).get()
