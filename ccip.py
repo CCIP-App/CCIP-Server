@@ -135,3 +135,7 @@ def dashboard():
     res['logged'] = Attendee.objects(status=True).count()
 
     return jsonify(res)
+
+@app.route('/scenarios')
+def scenarios():
+    return jsonify(['day1checkin', 'day1lunch', 'kit', 'vipkit', 'day2checkin', 'day2lunch'])
