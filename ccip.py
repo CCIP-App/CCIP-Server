@@ -43,7 +43,13 @@ def handle_error(error):
 @app.route('/status')
 @returns_json
 def status():
-    return get_attendee(request).to_json()
+    attendee = get_attendee(request)
+
+    if not request.args.get('StaffQuery') and not attendee.status:
+        attendee.status = True
+        attendee.save()
+
+    return attendee.to_json()
 
 
 @app.route('/use/<scenario_id>')

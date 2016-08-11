@@ -17,6 +17,7 @@ class Attendee(db.Document):
     user_id = db.StringField()
     scenario = db.DictField()
     attr = db.DictField()
+    status = db.BooleanField()
 
     meta = {
         'indexes': [
