@@ -100,9 +100,9 @@ def announcement():
     if request.method == 'POST':
         announcement = Announcement()
         announcement.datetime = time.time()
-        announcement.msg_zh = request.form['msg_zh']
-        announcement.msg_en = request.form['msg_en']
-        announcement.uri = request.form['uri']
+        announcement.msg_zh = request.form.get('msg_zh')
+        announcement.msg_en = request.form.get('msg_en')
+        announcement.uri = request.form.get('uri')
         announcement.save()
 
         return jsonify({'status': 'OK'})
