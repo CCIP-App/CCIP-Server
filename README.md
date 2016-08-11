@@ -6,7 +6,7 @@ A Community Checkin with Interactivity Project Server
 
 * Ubuntu Server 14.04 LTS and above
 * Python 3.4
-* `pip install Flask mongoengine flask-mongoengine flask-cors`
+* `pip install Flask mongoengine flask-mongoengine`
 * nginx
 * uwsgi
 * MongoDB

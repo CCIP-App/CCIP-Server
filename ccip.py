@@ -1,7 +1,6 @@
 import time
 from error import Error
 from flask import Flask, Response, request, jsonify
-from flask_cors import CORS
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
 from models import db, Attendee, Announcement
@@ -9,7 +8,6 @@ from models import db, Attendee, Announcement
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db.init_app(app)
-CORS(app, supports_credentials=True, resources=r'/*', allow_headers='Content-Type')
 
 def str2timestamp(str):
         return datetime.strptime(str, "%Y/%m/%d %H:%M").timestamp()
