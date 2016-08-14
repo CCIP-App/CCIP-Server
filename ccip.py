@@ -74,8 +74,13 @@ def use(scenario_id):
             raise Error("disabled scenario")
 
         if scenario_id == "day1checkin":
+            if request.args.get('StaffQuery'):
+                attendee.scenario['kit'].used = time.time()
+
             if time.time() > scenario.available_time + 5400:
                 attendee.scenario['day1lunch'].disabled = "Too late to check-in"
+            elif request.args.get('StaffQuery'):
+                attendee.scenario['day1lunch'].disabled = "Please use your badge"
             else:
                 attendee.scenario['day1lunch'].disabled = None
 
@@ -83,12 +88,15 @@ def use(scenario_id):
         elif scenario_id == "day2checkin":
             if time.time() > scenario.available_time + 5400:
                 attendee.scenario['day2lunch'].disabled = "Too late to check-in"
+            elif request.args.get('StaffQuery'):
+                attendee.scenario['day2lunch'].disabled = "Please use your badge"
             else:
                 attendee.scenario['day2lunch'].disabled = None
 
             if not attendee.scenario['kit'].used:
                 attendee.scenario['kit'].disabled = None
-
+                if request.args.get('StaffQuery'):
+                    attendee.scenario['kit'].used = time.time()
 
         scenario.used = time.time()
         attendee.save()
