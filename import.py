@@ -7,8 +7,10 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db.init_app(app)
 
+
 def str2timestamp(str):
     return datetime.strptime(str, "%Y/%m/%d %H:%M").timestamp()
+
 
 def list_import(attendee_list):
     for row in attendee_list:
@@ -77,6 +79,7 @@ def list_import(attendee_list):
         attendee.scenario['vipkit'] = sce6
 
         attendee.save()
+
 
 def staff_import(attendee_list):
     for row in attendee_list:
@@ -151,6 +154,7 @@ def staff_import(attendee_list):
         attendee.scenario['vipkit'] = sce6
 
         attendee.save()
+
 
 def from_csv(csv_file, staff=False): list_import(csv.DictReader(csv_file)) if not staff else staff_import(csv.DictReader(csv_file))
 

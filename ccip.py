@@ -9,8 +9,6 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db.init_app(app)
 
-def str2timestamp(str):
-        return datetime.strptime(str, "%Y/%m/%d %H:%M").timestamp()
 
 def returns_json(f):
     @wraps(f)
@@ -18,6 +16,7 @@ def returns_json(f):
         r = f(*args, **kwargs)
         return Response(r, content_type='application/json; charset=utf-8')
     return decorated_function
+
 
 def get_attendee(request):
     token = request.args.get('token')
@@ -32,17 +31,20 @@ def get_attendee(request):
 
     return attendee
 
+
 @app.errorhandler(Error)
 def handle_error(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
 
+
 @app.route('/landing')
 def landing():
     attendee = get_attendee(request)
 
     return jsonify({"nickname": attendee.user_id})
+
 
 @app.route('/status')
 @returns_json
@@ -105,6 +107,7 @@ def use(scenario_id):
     else:
         raise Error("link expired/not available now")
 
+
 @app.route('/announcement', methods=['GET', 'POST'])
 def announcement():
     if request.method == 'GET':
@@ -118,6 +121,7 @@ def announcement():
         announcement.save()
 
         return jsonify({'status': 'OK'})
+
 
 @app.route('/dashboard')
 def dashboard():
@@ -147,6 +151,7 @@ def dashboard():
     res['logged'] = Attendee.objects(status=True).count()
 
     return jsonify(res)
+
 
 @app.route('/scenarios')
 def scenarios():
