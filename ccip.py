@@ -4,6 +4,7 @@ from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
 from models import db, Attendee, Announcement
+from mongoengine.queryset.visitor import Q
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -130,17 +131,17 @@ def dashboard():
     res['day1checkin_used'] = Attendee.objects(scenario__day1checkin__used__ne=None).count()
     res['kit_used'] = Attendee.objects(scenario__kit__used__ne=None).count()
     res['day1lunch'] = {
-        'total': Attendee.objects(scenario__day1lunch__disabled=None).count(),
-        'meat': Attendee.objects(scenario__day1lunch__attr__diet="meat", scenario__day1lunch__disabled=None).count(),
-        'vegetarian': Attendee.objects(scenario__day1lunch__attr__diet="vegetarian", scenario__day1lunch__disabled=None).count(),
+        'total': Attendee.objects(Q(scenario__day1lunch__disabled=None) | Q(scenario__day1lunch__disabled="Please use your badge")).count(),
+        'meat': Attendee.objects(Q(scenario__day1lunch__attr__diet="meat") & (Q(scenario__day1lunch__disabled="Please use your badge") | Q(scenario__day1lunch__disabled=None))).count(),
+        'vegetarian': Attendee.objects(Q(scenario__day1lunch__attr__diet="vegetarian") & (Q(scenario__day1lunch__disabled="Please use your badge") | Q(scenario__day1lunch__disabled=None))).count(),
         'meat_used': Attendee.objects(scenario__day1lunch__attr__diet="meat", scenario__day1lunch__used__ne=None).count(),
         'vegetarian_used': Attendee.objects(scenario__day1lunch__attr__diet="vegetarian", scenario__day1lunch__used__ne=None).count(),
     }
     res['day2checkin_used'] = Attendee.objects(scenario__day2checkin__used__ne=None).count()
     res['day2lunch'] = {
-        'total': Attendee.objects(scenario__day2lunch__disabled=None).count(),
-        'meat': Attendee.objects(scenario__day2lunch__attr__diet="meat", scenario__day2lunch__disabled=None).count(),
-        'vegetarian': Attendee.objects(scenario__day2lunch__attr__diet="vegetarian", scenario__day2lunch__disabled=None).count(),
+        'total': Attendee.objects(Q(scenario__day2lunch__disabled=None) | Q(scenario__day2lunch__disabled="Please use your badge")).count(),
+        'meat': Attendee.objects(Q(scenario__day2lunch__attr__diet="meat") & (Q(scenario__day2lunch__disabled="Please use your badge") | Q(scenario__day2lunch__disabled=None))).count(),
+        'vegetarian': Attendee.objects(Q(scenario__day2lunch__attr__diet="vegetarian") & (Q(scenario__day2lunch__disabled="Please use your badge") | Q(scenario__day2lunch__disabled=None))).count(),
         'meat_used': Attendee.objects(scenario__day2lunch__attr__diet="meat", scenario__day2lunch__used__ne=None).count(),
         'vegetarian_used': Attendee.objects(scenario__day2lunch__attr__diet="vegetarian", scenario__day2lunch__used__ne=None).count(),
     }
