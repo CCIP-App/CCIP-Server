@@ -62,9 +62,9 @@ def list_import(attendee_list):
         sce5.countdown = 30
         sce5.disabled = "Haven't Check-in"
         if row['飲食'] == '素':
-            sce3.attr = {"diet": "vegetarian"}
+            sce5.attr = {"diet": "vegetarian"}
         else:
-            sce3.attr = {"diet": "meat"}
+            sce5.attr = {"diet": "meat"}
         attendee.scenario['day2lunch'] = sce5
 
         sce6 = Scenario()
