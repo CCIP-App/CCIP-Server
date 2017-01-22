@@ -52,8 +52,8 @@ def landing():
 def status():
     attendee = get_attendee(request)
 
-    if not request.args.get('StaffQuery') and not attendee.status:
-        attendee.status = True
+    if not request.args.get('StaffQuery') and not attendee.first_use:
+        attendee.first_use = time.time()
         attendee.save()
 
     return attendee.to_json()
