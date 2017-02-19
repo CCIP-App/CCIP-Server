@@ -32,7 +32,7 @@ def list_import(attendee_list):
             sce = Scenario()
             sce.order = i
             sce.available_time = str2timestamp(scenario['available_time'])
-            sce.expire_time = str2timestamp(scenario['available_time'])
+            sce.expire_time = str2timestamp(scenario['expire_time'])
             sce.countdown = scenario['countdown']
 
             if scenario.get('lock_message'):
