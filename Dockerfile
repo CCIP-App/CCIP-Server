@@ -2,9 +2,10 @@ FROM python:3.5
 MAINTAINER Denny Huang
 
 COPY ./requirements.txt /requirements.txt
-COPY ./app /app
 
 RUN pip install --no-cache-dir -r /requirements.txt
+
+COPY ./app /app
 
 EXPOSE 5000
 WORKDIR /app
