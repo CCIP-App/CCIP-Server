@@ -85,7 +85,7 @@ def use(scenario_id):
                 if rsce['unlock']:
                     attendee.scenario[rsce['id']].disabled = None
 
-                if request.args.get('StaffQuery') and rsce['staff_query_used']:
+                if request.args.get('StaffQuery') and rsce.get('staff_query_used'):
                     attendee.scenario[rsce['id']].used = time.time()
 
                 if rsce.get('disable_time'):
