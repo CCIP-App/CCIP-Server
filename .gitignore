@@ -94,5 +94,6 @@ ENV/
 
 # Config file
 config.py
+scenario*.json
 
 reg.csv

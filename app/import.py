@@ -1,4 +1,6 @@
 import csv
+import json
+
 from flask import Flask
 from models import db, Attendee, Scenario
 from datetime import datetime
@@ -9,7 +11,7 @@ db.init_app(app)
 
 
 def str2timestamp(str):
-    return datetime.strptime(str, "%Y/%m/%d %H:%M").timestamp()
+    return datetime.strptime(str, "%Y/%m/%d %H:%M %z").timestamp()
 
 
 def list_import(attendee_list):
@@ -21,62 +23,34 @@ def list_import(attendee_list):
         else:
             attendee.user_id = row['id']
 
-        sce1 = Scenario()
-        sce1.order = 1
-        sce1.available_time = str2timestamp("2016/08/20 7:30")
-        sce1.expire_time = str2timestamp("2016/08/20 17:00")
-        sce1.countdown = 0
-        attendee.scenario['day1checkin'] = sce1
+        with open('scenario.json') as json_file:
+            scenarios = json.load(json_file)
 
-        sce2 = Scenario()
-        sce2.order = 2
-        sce2.available_time = str2timestamp("2016/08/20 8:30")
-        sce2.expire_time = str2timestamp("2016/08/21 14:00")
-        sce2.countdown = 30
-        sce2.disabled = "Haven't Check-in"
-        attendee.scenario['kit'] = sce2
+        for scenario_id, scenario in scenarios.items():
+            sce = Scenario()
+            sce.order = scenario['order']
+            sce.available_time = str2timestamp(scenario['available_time'])
+            sce.expire_time = str2timestamp(scenario['expire_time'])
+            sce.countdown = scenario['countdown']
 
-        sce3 = Scenario()
-        sce3.order = 3
-        sce3.available_time = str2timestamp("2016/08/20 12:00")
-        sce3.expire_time = str2timestamp("2016/08/20 14:00")
-        sce3.countdown = 30
-        sce3.disabled = "Haven't Check-in"
-        if row['飲食'] == '素':
-            sce3.attr = {"diet": "vegetarian"}
-        else:
-            sce3.attr = {"diet": "meat"}
-        attendee.scenario['day1lunch'] = sce3
+            if scenario.get('lock_message'):
+                sce.disabled = scenario.get('lock_message')
 
-        sce4 = Scenario()
-        sce4.order = 4
-        sce4.available_time = str2timestamp("2016/08/21 7:30")
-        sce4.expire_time = str2timestamp("2016/08/21 17:00")
-        sce4.countdown = 0
-        attendee.scenario['day2checkin'] = sce4
+            if scenario.get('attr'):
+                for attr in scenario.get('attr'):
+                    if not attr.get('value'):
+                        sce.attr[attr['attr_name']] = row[attr['row_name']]
 
-        sce5 = Scenario()
-        sce5.order = 5
-        sce5.available_time = str2timestamp("2016/08/21 12:10")
-        sce5.expire_time = str2timestamp("2016/08/21 14:00")
-        sce5.countdown = 30
-        sce5.disabled = "Haven't Check-in"
-        if row['飲食'] == '素':
-            sce5.attr = {"diet": "vegetarian"}
-        else:
-            sce5.attr = {"diet": "meat"}
-        attendee.scenario['day2lunch'] = sce5
+                    else:
+                        sce.attr[attr['attr_name']] = attr.get('value')[row[attr['row_name']]]
 
-        sce6 = Scenario()
-        sce6.order = 6
-        sce6.available_time = str2timestamp("2016/08/20 8:15")
-        sce6.expire_time = str2timestamp("2016/08/21 14:00")
-        if row['個人贊助'] == 'Y':
-            sce6.disabled = None
-        else:
-            sce6.disabled = "For Supporters Only"
-        sce6.countdown = 30
-        attendee.scenario['vipkit'] = sce6
+            if scenario.get('not_lock_rule'):
+                if row[scenario.get('not_lock_rule')['row_name']] == scenario.get('not_lock_rule')['value_match']:
+                    sce.disabled = None
+                else:
+                    sce.disabled = scenario.get('not_lock_rule')['not_match_disable_message']
+
+            attendee.scenario[scenario_id] = sce
 
         attendee.save()
 

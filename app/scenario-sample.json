@@ -1,0 +1,100 @@
+{
+  "day1checkin": {
+    "order": 0,
+    "available_time": "2016/08/20 7:30 +0800",
+    "expire_time": "2016/08/20 17:00 +0800",
+    "countdown": 0,
+    "related_scenario": [
+      {
+        "id": "kit",
+        "staff_query_used": true,
+        "unlock": true
+      },
+      {
+        "id": "day1lunch",
+        "disable_time": "2016/08/20 10:30 +0800",
+        "disable_message": "Too late to check-in",
+        "staff_query_disable_message": "Please use your badge",
+        "unlock": true
+      }
+    ]
+  },
+  "kit": {
+    "order": 1,
+    "available_time": "2016/08/20 8:30 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
+    "countdown": 30,
+    "lock_message": "Haven't Check-in",
+    "attr": [
+      {
+        "row_name": "shirt_size",
+        "attr_name": "shirt_size"
+      }
+    ]
+  },
+  "day1lunch": {
+    "order": 2,
+    "available_time": "2016/08/20 12:00 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
+    "countdown": 30,
+    "lock_message": "Haven't Check-in",
+    "attr": [
+      {
+        "row_name": "飲食",
+        "attr_name": "diet",
+        "value": {
+          "素": "vegrtarian",
+          "葷": "meat"
+        }
+      }
+    ]
+  },
+  "day2checkin": {
+    "order": 3,
+    "available_time": "2016/08/21 7:30 +0800",
+    "expire_time": "2016/08/21 17:00 +0800",
+    "countdown": 0,
+    "related_scenario": [
+      {
+        "id": "kit",
+        "staff_query_used": true,
+        "unlock": true
+      },
+      {
+        "id": "day2lunch",
+        "disable_time": "2016/08/21 10:30 +0800",
+        "disable_message": "Too late to check-in",
+        "staff_query_disable_message": "Please use your badge",
+        "unlock": true
+      }
+    ]
+  },
+  "day2lunch": {
+    "order": 4,
+    "available_time": "2016/08/21 12:00 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
+    "countdown": 30,
+    "lock_message": "Haven't Check-in",
+    "attr": [
+      {
+        "row_name": "飲食",
+        "attr_name": "diet",
+        "value": {
+          "素": "vegrtarian",
+          "葷": "meat"
+        }
+      }
+    ]
+  },
+  "vipkit": {
+    "order": 5,
+    "available_time": "2016/08/20 8:15 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
+    "countdown": 30,
+    "not_lock_rule": {
+      "row_name": "個人贊助",
+      "value_match": "Y",
+      "not_match_disable_message": "For Supporters Only"
+    }
+  }
+}

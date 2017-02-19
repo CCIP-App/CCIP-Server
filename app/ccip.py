@@ -1,4 +1,6 @@
 import time
+import json
+from datetime import datetime
 from error import Error
 from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
@@ -8,6 +10,8 @@ from mongoengine.queryset.visitor import Q
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+with open('scenario.json') as json_file:
+    scenarios_def = json.load(json_file)
 db.init_app(app)
 
 
@@ -76,30 +80,18 @@ def use(scenario_id):
         if scenario.disabled is not None:
             raise Error("disabled scenario")
 
-        if scenario_id == "day1checkin":
-            if request.args.get('StaffQuery'):
-                attendee.scenario['kit'].used = time.time()
+        if scenarios_def.get(scenario_id).get('related_scenario'):
+            for rsce in scenarios_def.get(scenario_id).get('related_scenario'):
+                if rsce['unlock']:
+                    attendee.scenario[rsce['id']].disabled = None
 
-            if time.time() > scenario.available_time + 10800:
-                attendee.scenario['day1lunch'].disabled = "Too late to check-in"
-            elif request.args.get('StaffQuery'):
-                attendee.scenario['day1lunch'].disabled = "Please use your badge"
-            else:
-                attendee.scenario['day1lunch'].disabled = None
+                if request.args.get('StaffQuery') and rsce.get('staff_query_used'):
+                    attendee.scenario[rsce['id']].used = time.time()
 
-            attendee.scenario['kit'].disabled = None
-        elif scenario_id == "day2checkin":
-            if time.time() > scenario.available_time + 10800:
-                attendee.scenario['day2lunch'].disabled = "Too late to check-in"
-            elif request.args.get('StaffQuery'):
-                attendee.scenario['day2lunch'].disabled = "Please use your badge"
-            else:
-                attendee.scenario['day2lunch'].disabled = None
-
-            if not attendee.scenario['kit'].used:
-                attendee.scenario['kit'].disabled = None
-                if request.args.get('StaffQuery'):
-                    attendee.scenario['kit'].used = time.time()
+                if rsce.get('disable_time') and time.time() > datetime.strptime(rsce['disable_time'], "%Y/%m/%d %H:%M %z").timestamp():
+                    attendee.scenario[rsce['id']].disabled = rsce['disable_message']
+                elif request.args.get('StaffQuery') and rsce.get('staff_query_disable_message'):
+                    attendee.scenario[rsce['id']].disabled = rsce['staff_query_disable_message']
 
         scenario.used = time.time()
         attendee.save()
