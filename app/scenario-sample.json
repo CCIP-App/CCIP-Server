@@ -1,7 +1,7 @@
 {
   "day1checkin": {
-    "available_time": "2016/08/20 7:30",
-    "expire_time": "2016/08/20 17:00",
+    "available_time": "2016/08/20 7:30 +0800",
+    "expire_time": "2016/08/20 17:00 +0800",
     "countdown": 0,
     "related_scenario": [
       {
@@ -11,7 +11,7 @@
       },
       {
         "id": "day1lunch",
-        "disable_time": "2016/08/20 10:30",
+        "disable_time": "2016/08/20 10:30 +0800",
         "disable_message": "Too late to check-in",
         "staff_query_disable_message": "Please use your badge",
         "unlock": true
@@ -19,8 +19,8 @@
     ]
   },
   "kit": {
-    "available_time": "2016/08/20 8:30",
-    "expire_time": "2016/08/21 14:00",
+    "available_time": "2016/08/20 8:30 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
     "lock_message": "Haven't Check-in",
     "attr": [
@@ -31,8 +31,8 @@
     ]
   },
   "day1lunch": {
-    "available_time": "2016/08/20 12:00",
-    "expire_time": "2016/08/21 14:00",
+    "available_time": "2016/08/20 12:00 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
     "lock_message": "Haven't Check-in",
     "attr": [
@@ -47,8 +47,8 @@
     ]
   },
   "day2checkin": {
-    "available_time": "2016/08/21 7:30",
-    "expire_time": "2016/08/21 17:00",
+    "available_time": "2016/08/21 7:30 +0800",
+    "expire_time": "2016/08/21 17:00 +0800",
     "countdown": 0,
     "related_scenario": [
       {
@@ -58,7 +58,7 @@
       },
       {
         "id": "day2lunch",
-        "disable_time": "2016/08/21 10:30",
+        "disable_time": "2016/08/21 10:30 +0800",
         "disable_message": "Too late to check-in",
         "staff_query_disable_message": "Please use your badge",
         "unlock": true
@@ -66,8 +66,8 @@
     ]
   },
   "day2lunch": {
-    "available_time": "2016/08/21 12:00",
-    "expire_time": "2016/08/21 14:00",
+    "available_time": "2016/08/21 12:00 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
     "lock_message": "Haven't Check-in",
     "attr": [
@@ -82,8 +82,8 @@
     ]
   },
   "vipkit": {
-    "available_time": "2016/08/20 8:15",
-    "expire_time": "2016/08/21 14:00",
+    "available_time": "2016/08/20 8:15 +0800",
+    "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
     "not_lock_rule": {
       "row_name": "個人贊助",

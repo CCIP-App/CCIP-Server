@@ -11,7 +11,7 @@ db.init_app(app)
 
 
 def str2timestamp(str):
-    return datetime.strptime(str, "%Y/%m/%d %H:%M").timestamp()
+    return datetime.strptime(str, "%Y/%m/%d %H:%M %z").timestamp()
 
 
 def list_import(attendee_list):
