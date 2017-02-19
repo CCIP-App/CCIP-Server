@@ -1,94 +1,94 @@
 {
-	"day1checkin": {
-		"available_time": "2016/08/20 7:30",
-        "expire_time": "2016/08/20 17:00",
-        "countdown": 0,
-        "related_scenario": [
-            {
-                "id": "kit",
-                "staff_query_uesd": true,
-                "unlock": true
-            },
-            {
-                "id": "day1lunch",
-                "disable_time": "2016/08/20 10:30",
-                "disable_message": "Too late to check-in",
-                "staff_query_disable_message": "Please use your badge",
-                "unlock": true
-            }
-        ]
-	},
-    "kit": {
-		"available_time": "2016/08/20 8:30",
-        "expire_time": "2016/08/21 14:00",
-        "countdown": 30,
-        "lock_message": "Haven't Check-in",
-        "attr": [
-            {
-                "row_name": "shirt_size",
-                "attr_name": "shirt_size"
-            }
-        ]
-    },
-    "day1lunch": {
-		"available_time": "2016/08/20 12:00",
-        "expire_time": "2016/08/21 14:00",
-        "countdown": 30,
-        "lock_message": "Haven't Check-in",
-        "attr": [
-            {
-                "row_name": "飲食",
-                "attr_name": "diet",
-                "value": {
-                    "素": "vegrtarian",
-                    "葷": "meat"
-                }
-            }
-        ]
-    },
-    "day2checkin": {
-		"available_time": "2016/08/21 7:30",
-        "expire_time": "2016/08/21 17:00",
-        "countdown": 0,
-        "related_scenario": [
-            {
-                "id": "kit",
-                "staff_query_uesd": true,
-                "unlock": true
-            },
-            {
-                "id": "day2lunch",
-                "disable_time": "2016/08/21 10:30",
-                "disable_message": "Too late to check-in",
-                "staff_query_disable_message": "Please use your badge",
-                "unlock": true
-            }
-        ]
-    },
-    "day2lunch": {
-		"available_time": "2016/08/21 12:00",
-        "expire_time": "2016/08/21 14:00",
-        "countdown": 30,
-        "lock_message": "Haven't Check-in",
-        "attr": [
-            {
-                "row_name": "飲食",
-                "attr_name": "diet",
-                "value": {
-                    "素": "vegrtarian",
-                    "葷": "meat"
-                }
-            }
-        ]
-    },
-    "vipkit": {
-		"available_time": "2016/08/20 8:15",
-        "expire_time": "2016/08/21 14:00",
-        "countdown": 30,
-        "not_lock_rule": {
-            "row_name": "個人贊助",
-            "value_match": "Y",
-            "not_match_disable_message": "For Supporters Only"
+  "day1checkin": {
+    "available_time": "2016/08/20 7:30",
+    "expire_time": "2016/08/20 17:00",
+    "countdown": 0,
+    "related_scenario": [
+      {
+        "id": "kit",
+        "staff_query_uesd": true,
+        "unlock": true
+      },
+      {
+        "id": "day1lunch",
+        "disable_time": "2016/08/20 10:30",
+        "disable_message": "Too late to check-in",
+        "staff_query_disable_message": "Please use your badge",
+        "unlock": true
+      }
+    ]
+  },
+  "kit": {
+    "available_time": "2016/08/20 8:30",
+    "expire_time": "2016/08/21 14:00",
+    "countdown": 30,
+    "lock_message": "Haven't Check-in",
+    "attr": [
+      {
+        "row_name": "shirt_size",
+        "attr_name": "shirt_size"
+      }
+    ]
+  },
+  "day1lunch": {
+    "available_time": "2016/08/20 12:00",
+    "expire_time": "2016/08/21 14:00",
+    "countdown": 30,
+    "lock_message": "Haven't Check-in",
+    "attr": [
+      {
+        "row_name": "飲食",
+        "attr_name": "diet",
+        "value": {
+          "素": "vegrtarian",
+          "葷": "meat"
         }
+      }
+    ]
+  },
+  "day2checkin": {
+    "available_time": "2016/08/21 7:30",
+    "expire_time": "2016/08/21 17:00",
+    "countdown": 0,
+    "related_scenario": [
+      {
+        "id": "kit",
+        "staff_query_uesd": true,
+        "unlock": true
+      },
+      {
+        "id": "day2lunch",
+        "disable_time": "2016/08/21 10:30",
+        "disable_message": "Too late to check-in",
+        "staff_query_disable_message": "Please use your badge",
+        "unlock": true
+      }
+    ]
+  },
+  "day2lunch": {
+    "available_time": "2016/08/21 12:00",
+    "expire_time": "2016/08/21 14:00",
+    "countdown": 30,
+    "lock_message": "Haven't Check-in",
+    "attr": [
+      {
+        "row_name": "飲食",
+        "attr_name": "diet",
+        "value": {
+          "素": "vegrtarian",
+          "葷": "meat"
+        }
+      }
+    ]
+  },
+  "vipkit": {
+    "available_time": "2016/08/20 8:15",
+    "expire_time": "2016/08/21 14:00",
+    "countdown": 30,
+    "not_lock_rule": {
+      "row_name": "個人贊助",
+      "value_match": "Y",
+      "not_match_disable_message": "For Supporters Only"
     }
+  }
 }
