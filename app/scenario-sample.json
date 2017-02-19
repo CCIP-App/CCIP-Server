@@ -6,7 +6,7 @@
     "related_scenario": [
       {
         "id": "kit",
-        "staff_query_uesd": true,
+        "staff_query_used": true,
         "unlock": true
       },
       {
@@ -53,7 +53,7 @@
     "related_scenario": [
       {
         "id": "kit",
-        "staff_query_uesd": true,
+        "staff_query_used": true,
         "unlock": true
       },
       {
