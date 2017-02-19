@@ -1,6 +1,5 @@
-[
-	{
-		"id": "day1checkin",
+{
+	"day1checkin": {
 		"available_time": "2016/08/20 7:30",
         "expire_time": "2016/08/20 17:00",
         "countdown": 0,
@@ -19,8 +18,7 @@
             }
         ]
 	},
-    {
-        "id": "kit",
+    "kit": {
 		"available_time": "2016/08/20 8:30",
         "expire_time": "2016/08/21 14:00",
         "countdown": 30,
@@ -32,8 +30,7 @@
             }
         ]
     },
-    {
-        "id": "day1lunch",
+    "day1lunch": {
 		"available_time": "2016/08/20 12:00",
         "expire_time": "2016/08/21 14:00",
         "countdown": 30,
@@ -49,8 +46,7 @@
             }
         ]
     },
-    {
-		"id": "day2checkin",
+    "day2checkin": {
 		"available_time": "2016/08/21 7:30",
         "expire_time": "2016/08/21 17:00",
         "countdown": 0,
@@ -69,8 +65,7 @@
             }
         ]
     },
-    {
-        "id": "day2lunch",
+    "day2lunch": {
 		"available_time": "2016/08/21 12:00",
         "expire_time": "2016/08/21 14:00",
         "countdown": 30,
@@ -86,8 +81,7 @@
             }
         ]
     },
-    {
-        "id": "vipkit",
+    "vipkit": {
 		"available_time": "2016/08/20 8:15",
         "expire_time": "2016/08/21 14:00",
         "countdown": 30,
@@ -97,4 +91,4 @@
             "not_match_disable_message": "For Supporters Only"
         }
     }
-]
+}

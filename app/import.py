@@ -26,7 +26,9 @@ def list_import(attendee_list):
         with open('scenario.json') as json_file:
             scenarios = json.load(json_file)
 
-        for i, scenario in enumerate(scenarios):
+        for i, scenario_id in enumerate(scenarios.keys()):
+            scenario = scenarios[scenario_id]
+
             sce = Scenario()
             sce.order = i
             sce.available_time = str2timestamp(scenario['available_time'])
@@ -50,7 +52,7 @@ def list_import(attendee_list):
                 else:
                     sce.disabled = scenario.get('not_lock_rule')['not_match_disable_message']
 
-            attendee.scenario[scenario['id']] = sce
+            attendee.scenario[scenario_id] = sce
 
         attendee.save()
 
