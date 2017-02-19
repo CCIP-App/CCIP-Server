@@ -148,4 +148,4 @@ def dashboard():
 
 @app.route('/scenarios')
 def scenarios():
-    return jsonify(['day1checkin', 'day1lunch', 'kit', 'vipkit', 'day2checkin', 'day2lunch'])
+    return jsonify(list(scenarios_def.keys()))
