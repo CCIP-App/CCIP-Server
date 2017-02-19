@@ -26,11 +26,9 @@ def list_import(attendee_list):
         with open('scenario.json') as json_file:
             scenarios = json.load(json_file)
 
-        for i, scenario_id in enumerate(scenarios.keys()):
-            scenario = scenarios[scenario_id]
-
+        for scenario_id, scenario in scenarios.items():
             sce = Scenario()
-            sce.order = i
+            sce.order = scenario['order']
             sce.available_time = str2timestamp(scenario['available_time'])
             sce.expire_time = str2timestamp(scenario['expire_time'])
             sce.countdown = scenario['countdown']
