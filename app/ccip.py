@@ -82,6 +82,9 @@ def use(scenario_id):
 
         if scenarios_def.get(scenario_id).get('related_scenario'):
             for rsce in scenarios_def.get(scenario_id).get('related_scenario'):
+                if rsce['unlock']:
+                    attendee.scenario[rsce['id']].disabled = None
+
                 if request.args.get('StaffQuery') and rsce['staff_query_used']:
                     attendee.scenario[rsce['id']].used = time.time()
 
@@ -90,9 +93,6 @@ def use(scenario_id):
                         attendee.scenario[rsce['id']].disabled = rsce['disable_message']
                 elif request.args.get('StaffQuery') and rsce.get('staff_query_disable_message'):
                     attendee.scenario[rsce['id']].disabled = rsce['staff_query_disable_message']
-
-                if rsce['unlock']:
-                    attendee.scenario[rsce['id']].disabled = None
 
         scenario.used = time.time()
         attendee.save()
