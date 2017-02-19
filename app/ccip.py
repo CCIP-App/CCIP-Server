@@ -88,9 +88,8 @@ def use(scenario_id):
                 if request.args.get('StaffQuery') and rsce.get('staff_query_used'):
                     attendee.scenario[rsce['id']].used = time.time()
 
-                if rsce.get('disable_time'):
-                    if time.time() > datetime.strptime(rsce['disable_time'], "%Y/%m/%d %H:%M %z").timestamp():
-                        attendee.scenario[rsce['id']].disabled = rsce['disable_message']
+                if rsce.get('disable_time') and time.time() > datetime.strptime(rsce['disable_time'], "%Y/%m/%d %H:%M %z").timestamp():
+                    attendee.scenario[rsce['id']].disabled = rsce['disable_message']
                 elif request.args.get('StaffQuery') and rsce.get('staff_query_disable_message'):
                     attendee.scenario[rsce['id']].disabled = rsce['staff_query_disable_message']
 
