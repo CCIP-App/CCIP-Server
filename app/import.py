@@ -14,7 +14,7 @@ def str2timestamp(str):
     return datetime.strptime(str, "%Y/%m/%d %H:%M %z").timestamp()
 
 
-def list_import(attendee_list):
+def list_import(attendee_list, scenario_filename):
     for row in attendee_list:
         attendee = Attendee()
         attendee.token = row['token']
@@ -23,8 +23,8 @@ def list_import(attendee_list):
         else:
             attendee.user_id = row['id']
 
-        with open('scenario.json') as json_file:
-            scenarios = json.load(json_file)
+        with open(scenario_filename) as scenario_file:
+            scenarios = json.load(scenario_file)
 
         for scenario_id, scenario in scenarios.items():
             sce = Scenario()
@@ -130,14 +130,17 @@ def staff_import(attendee_list):
         attendee.save()
 
 
-def from_csv(csv_file, staff=False): list_import(csv.DictReader(csv_file)) if not staff else staff_import(csv.DictReader(csv_file))
+def from_csv(csv_file, staff=False):
+    list_import(csv.DictReader(csv_file), scenario_filename) if not staff else staff_import(csv.DictReader(csv_file))
+
 
 if __name__ == '__main__':
     import sys
     filename = sys.argv[1]
+    scenario_filename = sys.argv[2]
 
     try:
-        staff = bool(sys.argv[2])
+        staff = bool(sys.argv[3])
     except IndexError:
         staff = False
 
