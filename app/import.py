@@ -14,6 +14,39 @@ def str2timestamp(str):
     return datetime.strptime(str, "%Y/%m/%d %H:%M %z").timestamp()
 
 
+def bind_scenario(row, attendee, scenario_filename):
+    with open(scenario_filename) as scenario_file:
+        scenarios = json.load(scenario_file)
+
+    for scenario_id, scenario in scenarios.items():
+        sce = Scenario()
+        sce.order = scenario['order']
+        sce.available_time = str2timestamp(scenario['available_time'])
+        sce.expire_time = str2timestamp(scenario['expire_time'])
+        sce.countdown = scenario['countdown']
+
+        if scenario.get('lock_message'):
+            sce.disabled = scenario.get('lock_message')
+
+        if scenario.get('attr'):
+            for attr in scenario.get('attr'):
+                if not attr.get('value'):
+                    sce.attr[attr['attr_name']] = row[attr['row_name']]
+
+                else:
+                    sce.attr[attr['attr_name']] = attr.get('value')[row[attr['row_name']]]
+
+        if scenario.get('not_lock_rule'):
+            if row[scenario.get('not_lock_rule')['row_name']] == scenario.get('not_lock_rule')['value_match']:
+                sce.disabled = None
+            else:
+                sce.disabled = scenario.get('not_lock_rule')['not_match_disable_message']
+
+        attendee.scenario[scenario_id] = sce
+
+    attendee.save()
+
+
 def list_import(attendee_list, scenario_filename):
     for row in attendee_list:
         attendee = Attendee()
@@ -23,36 +56,7 @@ def list_import(attendee_list, scenario_filename):
         else:
             attendee.user_id = row['id']
 
-        with open(scenario_filename) as scenario_file:
-            scenarios = json.load(scenario_file)
-
-        for scenario_id, scenario in scenarios.items():
-            sce = Scenario()
-            sce.order = scenario['order']
-            sce.available_time = str2timestamp(scenario['available_time'])
-            sce.expire_time = str2timestamp(scenario['expire_time'])
-            sce.countdown = scenario['countdown']
-
-            if scenario.get('lock_message'):
-                sce.disabled = scenario.get('lock_message')
-
-            if scenario.get('attr'):
-                for attr in scenario.get('attr'):
-                    if not attr.get('value'):
-                        sce.attr[attr['attr_name']] = row[attr['row_name']]
-
-                    else:
-                        sce.attr[attr['attr_name']] = attr.get('value')[row[attr['row_name']]]
-
-            if scenario.get('not_lock_rule'):
-                if row[scenario.get('not_lock_rule')['row_name']] == scenario.get('not_lock_rule')['value_match']:
-                    sce.disabled = None
-                else:
-                    sce.disabled = scenario.get('not_lock_rule')['not_match_disable_message']
-
-            attendee.scenario[scenario_id] = sce
-
-        attendee.save()
+        bind_scenario(row, attendee, scenario_filename)
 
 
 def staff_import(attendee_list):
