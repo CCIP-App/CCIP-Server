@@ -6,7 +6,8 @@ from error import Error
 from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
-from models import db, Attendee, Announcement, PuzzleStatus
+from hashlib import sha1
+from models import db, Attendee, Announcement, PuzzleStatus, PuzzleBucket
 from mongoengine.queryset.visitor import Q
 
 import config
@@ -41,6 +42,17 @@ if puzzle_config is not None:
 
     if PuzzleStatus.objects.count() == 0:
         PuzzleStatus(puzzle=puzzle_status_init).save()
+
+
+def deliver_puzzle(attendee):
+    public_token = sha1(attendee.token.encode('utf-8')).hexdigest()
+
+    try:
+        puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
+    except DoesNotExist:
+        puzzle_bucket = PuzzleBucket(attendee=attendee, public_token=public_token)
+
+    puzzle_bucket.save()
 
 
 def returns_json(f):
