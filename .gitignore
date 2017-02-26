@@ -95,5 +95,6 @@ ENV/
 # Config file
 config.py
 scenario*.json
+puzzle-config.json
 
 reg.csv

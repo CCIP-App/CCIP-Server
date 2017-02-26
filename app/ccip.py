@@ -20,6 +20,21 @@ for type, filename in config.SCENARIO_DEFS.items():
     with open(filename) as json_file:
         scenarios_def[type] = json.load(json_file)
 
+try:
+    with open('puzzle-config.json', 'r') as json_file:
+        puzzle_config = json.load(json_file)
+
+        base = 0
+        for k, v in puzzle_config.items():
+            base += v
+
+        puzzle_rate = {}
+        for k, v in puzzle_config.items():
+            puzzle_rate[k] = v / base
+except:
+    puzzle_rate = None
+    app.logger.info('puzzle-config.json not found, not enable puzzle')
+
 
 def returns_json(f):
     @wraps(f)
