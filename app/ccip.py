@@ -1,5 +1,6 @@
 import time
 import json
+
 from datetime import datetime
 from error import Error
 from flask import Flask, Response, request, jsonify
@@ -8,11 +9,16 @@ from functools import wraps
 from models import db, Attendee, Announcement
 from mongoengine.queryset.visitor import Q
 
+import config
+
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-with open('scenario.json') as json_file:
-    scenarios_def = json.load(json_file)
 db.init_app(app)
+
+scenarios_def = {}
+for type, filename in config.SCENARIO_DEFS.items():
+    with open(filename) as json_file:
+        scenarios_def[type] = json.load(json_file)
 
 
 def returns_json(f):
@@ -80,8 +86,8 @@ def use(scenario_id):
         if scenario.disabled is not None:
             raise Error("disabled scenario")
 
-        if scenarios_def.get(scenario_id).get('related_scenario'):
-            for rsce in scenarios_def.get(scenario_id).get('related_scenario'):
+        if scenarios_def[attendee.type].get(scenario_id).get('related_scenario'):
+            for rsce in scenarios_def[attendee.type].get(scenario_id).get('related_scenario'):
                 if rsce['unlock']:
                     attendee.scenario[rsce['id']].disabled = None
 
@@ -148,4 +154,7 @@ def dashboard():
 
 @app.route('/scenarios')
 def scenarios():
-    return jsonify(list(scenarios_def.keys()))
+    try:
+        return jsonify(list(scenarios_def[request.args.get('type')].keys()))
+    except:
+        raise Error("type required")
