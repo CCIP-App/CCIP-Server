@@ -6,7 +6,7 @@ from error import Error
 from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
-from models import db, Attendee, Announcement
+from models import db, Attendee, Announcement, PuzzleStatus
 from mongoengine.queryset.visitor import Q
 
 import config
@@ -20,20 +20,27 @@ for type, filename in config.SCENARIO_DEFS.items():
     with open(filename) as json_file:
         scenarios_def[type] = json.load(json_file)
 
+
 try:
     with open('puzzle-config.json', 'r') as json_file:
         puzzle_config = json.load(json_file)
-
-        base = 0
-        for k, v in puzzle_config.items():
-            base += v
-
-        puzzle_rate = {}
-        for k, v in puzzle_config.items():
-            puzzle_rate[k] = v / base
 except:
-    puzzle_rate = None
+    puzzle_config = None
     app.logger.info('puzzle-config.json not found, not enable puzzle')
+
+if puzzle_config is not None:
+    base = 0
+    for k, v in puzzle_config.items():
+        base += v
+
+    puzzle_status_init = {}
+    puzzle_rate = {}
+    for k, v in puzzle_config.items():
+        puzzle_status_init[k] = 0
+        puzzle_rate[k] = v / base
+
+    if PuzzleStatus.objects.count() == 0:
+        PuzzleStatus(puzzle=puzzle_status_init).save()
 
 
 def returns_json(f):
