@@ -30,18 +30,21 @@ except:
     app.logger.info('puzzle-config.json not found, not enable puzzle')
 
 if puzzle_config is not None:
+    puzzle_status_init = True if (PuzzleStatus.objects.count() == 0) else False
+
     base = 0
     for k, v in puzzle_config.items():
         base += v
 
-    puzzle_status_init = {}
     puzzle_rate = {}
     for k, v in puzzle_config.items():
-        puzzle_status_init[k] = 0
         puzzle_rate[k] = v / base
 
-    if PuzzleStatus.objects.count() == 0:
-        PuzzleStatus(puzzle=puzzle_status_init).save()
+        if puzzle_status_init:
+            PuzzleStatus(puzzle=k, quantity=0).save()
+
+    if puzzle_status_init:
+        PuzzleStatus(puzzle='total', quantity=0).save()
 
 
 def deliver_puzzle(attendee):

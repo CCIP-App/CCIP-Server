@@ -3,7 +3,14 @@ from models import Attendee
 
 
 class PuzzleStatus(db.Document):
-    puzzle = db.DictField()
+    puzzle = db.StringField()
+    quantity = db.IntField()
+
+    meta = {
+        'indexes': [
+            'puzzle'
+        ]
+    }
 
 
 class PuzzleBucket(db.Document):
