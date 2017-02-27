@@ -18,6 +18,7 @@ class PuzzleBucket(db.Document):
     public_token = db.StringField()
     puzzle = db.ListField()
     valid = db.BooleanField(default=True)
+    deliverer = db.ListField()
 
     meta = {
         'indexes': [
