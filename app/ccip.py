@@ -183,6 +183,14 @@ def get_puzzle():
     })
 
 
+@app.route('/event/puzzle/dashboard')
+@returns_json
+def get_puzzle_dashboard():
+    puzzle_status = PuzzleStatus.objects()
+
+    return puzzle_status.to_json()
+
+
 @app.route('/announcement', methods=['GET', 'POST'])
 def announcement():
     if request.method == 'GET':
