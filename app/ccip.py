@@ -173,6 +173,16 @@ def use(scenario_id):
         raise Error("link expired/not available now")
 
 
+@app.route('/event/puzzle')
+def get_puzzle():
+    puzzle_bucket = get_puzzle_bucket(request)
+
+    return jsonify({
+        "user_id": puzzle_bucket.attendee.user_id,
+        "puzzle": puzzle_bucket.puzzle
+    })
+
+
 @app.route('/announcement', methods=['GET', 'POST'])
 def announcement():
     if request.method == 'GET':
