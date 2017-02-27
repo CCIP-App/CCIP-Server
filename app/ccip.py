@@ -55,13 +55,19 @@ if puzzle_config is not None:
         PuzzleStatus(puzzle='total', quantity=0).save()
 
 
-def deliver_puzzle(attendee):
+def deliver_puzzle(attendee, deliverer=None):
     public_token = sha1(attendee.token.encode('utf-8')).hexdigest()
 
     try:
         puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
     except DoesNotExist:
         puzzle_bucket = PuzzleBucket(attendee=attendee, public_token=public_token)
+
+    if deliverer is not None:
+        if deliverer in puzzle_bucket.deliverer:
+            raise Error('Already take from this deliverer')
+        else:
+            puzzle_bucket.deliverer.append(deliverer)
 
     total = PuzzleStatus.objects(puzzle='total').get().quantity
 
@@ -236,7 +242,7 @@ def do_deliver_puzzle():
         raise Error("invalid receiver token")
 
     if token in delivery_permission.keys():
-        deliver_puzzle(attendee)
+        deliver_puzzle(attendee, token)
         app.logger.info(delivery_permission[token] + ' ' + token + ' deliver puzzle to ' + attendee.token)
         return jsonify({'status': 'OK'})
     else:
