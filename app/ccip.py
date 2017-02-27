@@ -147,6 +147,10 @@ def use(scenario_id):
                 elif request.args.get('StaffQuery') and rsce.get('staff_query_disable_message'):
                     attendee.scenario[rsce['id']].disabled = rsce['staff_query_disable_message']
 
+        if scenarios_def[attendee.type].get(scenario_id).get('deliver_puzzle') and puzzle_config is not None:
+            for i in range(scenarios_def[attendee.type].get(scenario_id).get('deliver_puzzle')):
+                deliver_puzzle(attendee)
+
         scenario.used = time.time()
         attendee.save()
 
