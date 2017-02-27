@@ -222,6 +222,27 @@ def get_deliverer():
         raise Error("invalid token")
 
 
+@app.route('/event/puzzle/deliver', methods=['POST'])
+def do_deliver_puzzle():
+    token = request.args.get('token')
+    receiver = request.form.get('receiver')
+
+    if token is None or receiver is None:
+        raise Error("token and receiver required")
+
+    try:
+        attendee = Attendee.objects(token=receiver).get()
+    except DoesNotExist:
+        raise Error("invalid receiver token")
+
+    if token in delivery_permission.keys():
+        deliver_puzzle(attendee)
+        app.logger.info(delivery_permission[token] + ' ' + token + ' deliver puzzle to ' + attendee.token)
+        return jsonify({'status': 'OK'})
+    else:
+        raise Error("invalid token")
+
+
 @app.route('/event/puzzle/dashboard')
 @returns_json
 def get_puzzle_dashboard():
