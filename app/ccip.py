@@ -184,6 +184,24 @@ def get_puzzle():
     })
 
 
+@app.route('/event/puzzle/revoke')
+def revoke_puzzle():
+    attendee = get_attendee(request)
+
+    public_token = sha1(attendee.token.encode('utf-8')).hexdigest()
+
+    try:
+        puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
+    except DoesNotExist:
+        raise Error("invalid token")
+
+    puzzle_bucket.valid = False
+
+    puzzle_bucket.save()
+
+    return jsonify({'status': 'OK'})
+
+
 @app.route('/event/puzzle/dashboard')
 @returns_json
 def get_puzzle_dashboard():
