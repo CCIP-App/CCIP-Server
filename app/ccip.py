@@ -9,6 +9,7 @@ from functools import wraps
 from hashlib import sha1
 from models import db, Attendee, Announcement, PuzzleStatus, PuzzleBucket
 from mongoengine.queryset.visitor import Q
+from random import randint
 
 import config
 
@@ -54,6 +55,16 @@ def deliver_puzzle(attendee):
         puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
     except DoesNotExist:
         puzzle_bucket = PuzzleBucket(attendee=attendee, public_token=public_token)
+
+    total = PuzzleStatus.objects(puzzle='total').get().quantity
+
+    for i in range(len(puzzle_config)):
+        puzzle = list(puzzle_config.keys())[randint(0, len(puzzle_config) - 1)]
+        if i == len(puzzle_config) - 1 or total == 0 or PuzzleStatus.objects(puzzle=puzzle).get().quantity / total < puzzle_rate[puzzle]:
+            puzzle_bucket.puzzle.append(puzzle)
+            PuzzleStatus.objects(puzzle='total').update_one(inc__quantity=1)
+            PuzzleStatus.objects(puzzle=puzzle).update_one(inc__quantity=1)
+            break
 
     puzzle_bucket.save()
 
