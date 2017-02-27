@@ -24,8 +24,8 @@ for type, filename in config.SCENARIO_DEFS.items():
 
 
 try:
-    with open('puzzle-config.json', 'r') as json_file:
-        puzzle_config = json.load(json_file)
+    with open('puzzle-config.json', 'r') as puzzle_config_json:
+        puzzle_config = json.load(puzzle_config_json)
 except:
     puzzle_config = None
     app.logger.info('puzzle-config.json not found, not enable puzzle')
