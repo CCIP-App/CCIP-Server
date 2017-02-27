@@ -30,6 +30,13 @@ except:
     puzzle_config = None
     app.logger.info('puzzle-config.json not found, not enable puzzle')
 
+try:
+    with open('delivery-permission.json', 'r') as delivery_permission_json:
+        delivery_permission = json.load(delivery_permission_json)
+except:
+    delivery_permission = None
+    app.logger.info('delivery-permission.json not found, can not deliver puzzle')
+
 if puzzle_config is not None:
     puzzle_status_init = True if (PuzzleStatus.objects.count() == 0) else False
 
