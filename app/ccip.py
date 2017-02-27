@@ -77,6 +77,20 @@ def returns_json(f):
     return decorated_function
 
 
+def get_puzzle_bucket(request):
+    token = request.args.get('token')
+
+    if token is None:
+        raise Error("token required")
+
+    try:
+        puzzle_bucket = PuzzleBucket.objects(public_token=token).get()
+    except DoesNotExist:
+        raise Error("invalid token")
+
+    return puzzle_bucket
+
+
 def get_attendee(request):
     token = request.args.get('token')
 
