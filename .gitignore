@@ -96,5 +96,6 @@ ENV/
 config.py
 scenario*.json
 puzzle-config.json
+delivery-permission.json
 
 reg.csv
