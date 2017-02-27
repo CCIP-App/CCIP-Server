@@ -209,6 +209,19 @@ def revoke_puzzle():
     return jsonify({'status': 'OK'})
 
 
+@app.route('/event/puzzle/deliverer')
+def get_deliverer():
+    token = request.args.get('token')
+
+    if token is None:
+        raise Error("token required")
+
+    if token in delivery_permission.keys():
+        return jsonify({'display_name': delivery_permission[token]})
+    else:
+        raise Error("invalid token")
+
+
 @app.route('/event/puzzle/dashboard')
 @returns_json
 def get_puzzle_dashboard():
