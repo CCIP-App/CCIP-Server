@@ -17,7 +17,8 @@
         "staff_query_disable_message": "Please use your badge",
         "unlock": true
       }
-    ]
+    ],
+	"deliver_puzzle": 2
   },
   "kit": {
     "order": 1,
