@@ -49,10 +49,10 @@ if puzzle_config is not None:
         puzzle_rate[k] = v / base
 
         if puzzle_status_init:
-            PuzzleStatus(puzzle=k, quantity=0).save()
+            PuzzleStatus(puzzle=k).save()
 
     if puzzle_status_init:
-        PuzzleStatus(puzzle='total', quantity=0).save()
+        PuzzleStatus(puzzle='total').save()
 
 
 def deliver_puzzle(attendee, deliverer=None):
