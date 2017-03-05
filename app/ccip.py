@@ -212,7 +212,7 @@ def revoke_puzzle():
     for puzzle in puzzle_bucket.puzzle:
         PuzzleStatus.objects(puzzle=puzzle).update_one(dec__currency=1)
 
-    puzzle_bucket.valid = False
+    puzzle_bucket.valid = time.time()
 
     puzzle_bucket.save()
 

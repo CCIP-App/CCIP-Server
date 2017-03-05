@@ -18,7 +18,7 @@ class PuzzleBucket(db.Document):
     attendee = db.ReferenceField(Attendee)
     public_token = db.StringField()
     puzzle = db.ListField()
-    valid = db.BooleanField(default=True)
+    valid = db.IntField()
     deliverer = db.ListField()
 
     meta = {
