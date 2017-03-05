@@ -208,6 +208,10 @@ def revoke_puzzle():
     except DoesNotExist:
         raise Error("invalid token")
 
+    PuzzleStatus.objects(puzzle='total').update_one(dec__currency=len(puzzle_bucket.puzzle))
+    for puzzle in puzzle_bucket.puzzle:
+        PuzzleStatus.objects(puzzle=puzzle).update_one(dec__currency=1)
+
     puzzle_bucket.valid = False
 
     puzzle_bucket.save()
