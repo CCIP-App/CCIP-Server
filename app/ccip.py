@@ -213,6 +213,7 @@ def revoke_puzzle():
         PuzzleStatus.objects(puzzle=puzzle).update_one(dec__currency=1)
 
     puzzle_bucket.valid = time.time()
+    puzzle_bucket.coupon = 0
 
     puzzle_bucket.save()
 
