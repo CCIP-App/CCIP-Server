@@ -18,6 +18,7 @@ def bind_scenario(row, attendee, scenarios):
     for scenario_id, scenario in scenarios.items():
         sce = Scenario()
         sce.order = scenario['order']
+        sce.display_text = scenario['display_text']
         sce.available_time = str2timestamp(scenario['available_time'])
         sce.expire_time = str2timestamp(scenario['expire_time'])
         sce.countdown = scenario['countdown']
