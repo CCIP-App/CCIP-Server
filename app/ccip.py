@@ -6,7 +6,6 @@ from error import Error
 from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
-from hashlib import sha1
 from models import db, Attendee, Announcement, PuzzleStatus, PuzzleBucket
 from mongoengine.queryset.visitor import Q
 from random import randint
@@ -56,12 +55,10 @@ if puzzle_config is not None:
 
 
 def deliver_puzzle(attendee, deliverer=None):
-    public_token = sha1(attendee.token.encode('utf-8')).hexdigest()
-
     try:
-        puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
+        puzzle_bucket = PuzzleBucket.objects(public_token=attendee.public_token).get()
     except DoesNotExist:
-        puzzle_bucket = PuzzleBucket(attendee=attendee, public_token=public_token)
+        puzzle_bucket = PuzzleBucket(attendee=attendee, public_token=attendee.public_token)
 
     if deliverer is not None:
         if deliverer in puzzle_bucket.deliverer:
@@ -98,6 +95,15 @@ def get_puzzle_bucket(request):
 
     try:
         puzzle_bucket = PuzzleBucket.objects(public_token=token).get()
+    except DoesNotExist:
+        raise Error("invalid token")
+
+    return puzzle_bucket
+
+
+def get_puzzle_bucket_by_attendee(attendee):
+    try:
+        puzzle_bucket = PuzzleBucket.objects(public_token=attendee.public_token).get()
     except DoesNotExist:
         raise Error("invalid token")
 
@@ -202,12 +208,7 @@ def get_puzzle():
 def revoke_puzzle():
     attendee = get_attendee(request)
 
-    public_token = sha1(attendee.token.encode('utf-8')).hexdigest()
-
-    try:
-        puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
-    except DoesNotExist:
-        raise Error("invalid token")
+    puzzle_bucket = get_puzzle_bucket_by_attendee(attendee)
 
     PuzzleStatus.objects(puzzle='total').update_one(dec__currency=len(puzzle_bucket.puzzle))
     for puzzle in puzzle_bucket.puzzle:
@@ -225,12 +226,7 @@ def revoke_puzzle():
 def use_coupon():
     attendee = get_attendee(request)
 
-    public_token = sha1(attendee.token.encode('utf-8')).hexdigest()
-
-    try:
-        puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
-    except DoesNotExist:
-        raise Error("invalid token")
+    puzzle_bucket = get_puzzle_bucket_by_attendee(attendee)
 
     puzzle_bucket.coupon = time.time()
     puzzle_bucket.save()
