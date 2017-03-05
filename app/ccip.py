@@ -193,7 +193,8 @@ def get_puzzle():
     return jsonify({
         "user_id": puzzle_bucket.attendee.user_id,
         "puzzle": puzzle_bucket.puzzle,
-        "valid": puzzle_bucket.valid
+        "valid": puzzle_bucket.valid,
+        "coupon": puzzle_bucket.coupon
     })
 
 
