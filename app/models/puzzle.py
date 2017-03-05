@@ -4,7 +4,8 @@ from models import Attendee
 
 class PuzzleStatus(db.Document):
     puzzle = db.StringField()
-    quantity = db.IntField()
+    quantity = db.IntField(default=0)
+    currency = db.IntField(default=0)
 
     meta = {
         'indexes': [
