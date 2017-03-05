@@ -220,6 +220,23 @@ def revoke_puzzle():
     return jsonify({'status': 'OK'})
 
 
+@app.route('/event/puzzle/coupon')
+def use_coupon():
+    attendee = get_attendee(request)
+
+    public_token = sha1(attendee.token.encode('utf-8')).hexdigest()
+
+    try:
+        puzzle_bucket = PuzzleBucket.objects(public_token=public_token).get()
+    except DoesNotExist:
+        raise Error("invalid token")
+
+    puzzle_bucket.coupon = time.time()
+    puzzle_bucket.save()
+
+    return jsonify({'status': 'OK'})
+
+
 @app.route('/event/puzzle/deliverer')
 def get_deliverer():
     token = request.args.get('token')
