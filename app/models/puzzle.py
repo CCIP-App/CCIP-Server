@@ -19,6 +19,7 @@ class PuzzleBucket(db.Document):
     public_token = db.StringField()
     puzzle = db.ListField()
     valid = db.IntField()
+    coupon = db.IntField()
     deliverer = db.ListField()
 
     meta = {
