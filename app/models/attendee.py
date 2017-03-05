@@ -5,6 +5,7 @@ from hashlib import sha1
 
 class Scenario(db.EmbeddedDocument):
     order = db.IntField()
+    display_text = db.DictField()
     available_time = db.IntField()
     expire_time = db.IntField()
     used = db.IntField()
