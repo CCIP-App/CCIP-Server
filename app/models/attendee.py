@@ -1,5 +1,6 @@
 import bson
 from models import db
+from hashlib import sha1
 
 
 class Scenario(db.EmbeddedDocument):
@@ -25,6 +26,10 @@ class Attendee(db.Document):
             'token'
         ]
     }
+
+    @property
+    def public_token(self):
+        return sha1(self.token.encode('utf-8')).hexdigest()
 
     def to_json(self):
         data = self.to_mongo()
