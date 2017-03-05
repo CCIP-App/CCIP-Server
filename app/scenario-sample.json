@@ -1,6 +1,10 @@
 {
   "day1checkin": {
     "order": 0,
+    "display_text": {
+      "en-US": "Day 1 Check-in",
+      "zh-TW": "Day 1 報到"
+    },
     "available_time": "2016/08/20 7:30 +0800",
     "expire_time": "2016/08/20 17:00 +0800",
     "countdown": 0,
@@ -22,6 +26,10 @@
   },
   "kit": {
     "order": 1,
+    "display_text": {
+      "en-US": "Welcome Kit",
+      "zh-TW": "迎賓袋"
+    },
     "available_time": "2016/08/20 8:30 +0800",
     "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
@@ -35,6 +43,10 @@
   },
   "day1lunch": {
     "order": 2,
+    "display_text": {
+      "en-US": "Day 1 Lunch",
+      "zh-TW": "Day 1 午餐"
+    },
     "available_time": "2016/08/20 12:00 +0800",
     "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
@@ -52,6 +64,10 @@
   },
   "day2checkin": {
     "order": 3,
+    "display_text": {
+      "en-US": "Day 2 Check-in",
+      "zh-TW": "Day 2 報到"
+    },
     "available_time": "2016/08/21 7:30 +0800",
     "expire_time": "2016/08/21 17:00 +0800",
     "countdown": 0,
@@ -72,6 +88,10 @@
   },
   "day2lunch": {
     "order": 4,
+    "display_text": {
+      "en-US": "Day 2 Lunch",
+      "zh-TW": "Day 2 午餐"
+    },
     "available_time": "2016/08/21 12:00 +0800",
     "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
@@ -89,6 +109,10 @@
   },
   "vipkit": {
     "order": 5,
+    "display_text": {
+      "en-US": "Special Gift",
+      "zh-TW": "獨家紀念品"
+    },
     "available_time": "2016/08/20 8:15 +0800",
     "expire_time": "2016/08/21 14:00 +0800",
     "countdown": 30,
