@@ -75,8 +75,8 @@ def deliver_puzzle(attendee, deliverer=None):
         puzzle = list(puzzle_config.keys())[randint(0, len(puzzle_config) - 1)]
         if i == len(puzzle_config) - 1 or total == 0 or PuzzleStatus.objects(puzzle=puzzle).get().quantity / total < puzzle_rate[puzzle]:
             puzzle_bucket.puzzle.append(puzzle)
-            PuzzleStatus.objects(puzzle='total').update_one(inc__quantity=1)
-            PuzzleStatus.objects(puzzle=puzzle).update_one(inc__quantity=1)
+            PuzzleStatus.objects(puzzle='total').update_one(inc__quantity=1, inc__currency=1)
+            PuzzleStatus.objects(puzzle=puzzle).update_one(inc__quantity=1, inc__currency=1)
             break
 
     puzzle_bucket.save()
