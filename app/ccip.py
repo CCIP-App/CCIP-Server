@@ -58,7 +58,7 @@ def deliver_puzzle(attendee, deliverer=None):
     try:
         puzzle_bucket = PuzzleBucket.objects(public_token=attendee.public_token).get()
     except DoesNotExist:
-        puzzle_bucket = PuzzleBucket(attendee=attendee, public_token=attendee.public_token)
+        puzzle_bucket = PuzzleBucket.init(attendee)
 
     if deliverer is not None:
         if deliverer in puzzle_bucket.deliverer:
