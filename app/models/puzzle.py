@@ -1,3 +1,5 @@
+from mongoengine import NotUniqueError
+
 from models import db
 from models import Attendee
 
@@ -27,3 +29,10 @@ class PuzzleBucket(db.Document):
             'public_token'
         ]
     }
+
+    @classmethod
+    def init(cls, attendee):
+        try:
+            return PuzzleBucket.objects.create(attendee=attendee, public_token=attendee.public_token)
+        except NotUniqueError:
+            return PuzzleBucket.objects(public_token=attendee.public_token).get()
