@@ -147,6 +147,8 @@ def status():
         attendee.first_use = time.time()
         attendee.save()
 
+        PuzzleBucket.init(attendee)
+
     return attendee.to_json()
 
 
