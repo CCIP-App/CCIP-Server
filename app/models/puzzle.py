@@ -16,7 +16,7 @@ class PuzzleStatus(db.Document):
 
 class PuzzleBucket(db.Document):
     attendee = db.ReferenceField(Attendee)
-    public_token = db.StringField()
+    public_token = db.StringField(unique=True)
     puzzle = db.ListField()
     valid = db.IntField()
     coupon = db.IntField()
