@@ -297,7 +297,7 @@ def announcement():
 def dashboard():
     res = {}
     res['total'] = Attendee.objects().count()
-    res['checkin_used'] = Attendee.objects(scenario__checkin__used__ne=None).count()
+    res['checkin_used'] = Attendee.objects(type='audience', scenario__checkin__used__ne=None).count()
     res['kit_used'] = Attendee.objects(scenario__kit__used__ne=None).count()
     res['lunch'] = {
         'total': Attendee.objects(Q(scenario__lunch__disabled=None) | Q(scenario__lunch__disabled="Please use your badge")).count(),
