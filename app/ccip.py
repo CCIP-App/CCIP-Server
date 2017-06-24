@@ -250,6 +250,11 @@ def get_deliverer():
         raise Error("invalid token")
 
 
+@app.route('/event/puzzle/deliverers')
+def get_deliverers():
+    return jsonify(list(delivery_permission.values()))
+
+
 @app.route('/event/puzzle/deliver', methods=['POST'])
 def do_deliver_puzzle():
     token = request.args.get('token')
