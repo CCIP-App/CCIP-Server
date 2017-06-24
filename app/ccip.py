@@ -201,6 +201,7 @@ def get_puzzle():
     return jsonify({
         "user_id": puzzle_bucket.attendee.user_id,
         "puzzle": puzzle_bucket.puzzle,
+        "deliverer": puzzle_bucket.deliverer,
         "valid": puzzle_bucket.valid,
         "coupon": puzzle_bucket.coupon
     })
