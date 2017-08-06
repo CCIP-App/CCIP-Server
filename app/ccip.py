@@ -174,7 +174,7 @@ def use(scenario_id):
                 if rsce['unlock']:
                     attendee.scenario[rsce['id']].disabled = None
 
-                if request.args.get('StaffQuery') and rsce.get('staff_query_used'):
+                if request.args.get('StaffQuery') and rsce.get('staff_query_used') and attendee.scenario[rsce['id']].used is None:
                     attendee.scenario[rsce['id']].used = time.time()
 
                 if rsce.get('disable_time') and time.time() > datetime.strptime(rsce['disable_time'], "%Y/%m/%d %H:%M %z").timestamp():
