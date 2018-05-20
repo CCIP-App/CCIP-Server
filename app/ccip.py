@@ -320,10 +320,6 @@ def dashboard():
         'meat_used': Attendee.objects(scenario__day2lunch__attr__diet="meat", scenario__day2lunch__used__ne=None).count(),
         'vegetarian_used': Attendee.objects(scenario__day2lunch__attr__diet="vegetarian", scenario__day2lunch__used__ne=None).count(),
     }
-    res['vipkit'] = {
-        'total': Attendee.objects(scenario__vipkit__disabled=None).count(),
-        'used': Attendee.objects(scenario__vipkit__used__ne=None).count()
-    }
     res['logged'] = Attendee.objects().count() - Attendee.objects(first_use=None).count()
 
     return jsonify(res)
