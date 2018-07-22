@@ -2,17 +2,6 @@
 
 A Community Checkin with Interactivity Project Server
 
-## Pre-Requirement
+## Pre-Requirement & run
 
-* Ubuntu Server 14.04 LTS and above
-* Python 3.4
-* `pip install Flask mongoengine flask-mongoengine`
-* nginx
-* uwsgi
-* MongoDB
-
-## Run
-
-* `export FLASK_DEBUG=1` (optional)
-* `export FLASK_APP=ccip.py`
-* `flask run`
+Read `Dockerfile`
