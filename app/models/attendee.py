@@ -15,6 +15,7 @@ class Scenario(db.EmbeddedDocument):
 
 
 class Attendee(db.Document):
+    event_id = db.StringField()
     token = db.StringField(unique=True)
     user_id = db.StringField()
     scenario = db.DictField()
