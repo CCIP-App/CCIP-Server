@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 
 from flask import Flask
 from models import db, Attendee, Scenario
@@ -48,6 +49,7 @@ def bind_scenario(row, attendee, scenarios):
 def list_import(attendee_list, scenarios):
     for row in attendee_list:
         attendee = Attendee()
+        attendee.event_id = os.environ['EVENT_ID']
         attendee.token = row['token']
         if row['id'] == '':
             attendee.user_id = row['name']
@@ -62,6 +64,7 @@ def list_import(attendee_list, scenarios):
 def staff_import(attendee_list, scenarios):
     for row in attendee_list:
         attendee = Attendee()
+        attendee.event_id = os.environ['EVENT_ID']
         attendee.token = row['username']
         attendee.user_id = row['display_name']
         teams = row['groups'].split(',')
@@ -87,6 +90,13 @@ def from_csv(csv_file, scenarios, staff=False):
 
 if __name__ == '__main__':
     import sys
+
+    try:
+        os.environ['EVENT_ID']
+    except KeyError:
+        print("export EVENT_ID in env")
+        exit(1)
+
     filename = sys.argv[1]
     scenario_filename = sys.argv[2]
 
