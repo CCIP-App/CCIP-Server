@@ -25,7 +25,9 @@ class Attendee(db.Document):
 
     meta = {
         'indexes': [
-            'token'
+            'event_id',
+            'token',
+            'type'
         ]
     }
 
