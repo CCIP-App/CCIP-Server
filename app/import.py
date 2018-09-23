@@ -18,6 +18,12 @@ def str2timestamp(str):
 def bind_scenario(row, attendee, scenarios):
     for scenario_id, scenario in scenarios.items():
         sce = Scenario()
+
+        if scenario.get('show_rule'):
+            if row[scenario.get('show_rule')['row_name']] != scenario.get('show_rule')['value_match']:
+                continue
+
+
         sce.order = scenario['order']
         sce.display_text = scenario['display_text']
         sce.available_time = str2timestamp(scenario['available_time'])
