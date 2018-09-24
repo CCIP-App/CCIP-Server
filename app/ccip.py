@@ -328,6 +328,19 @@ def dashboard():
 
     return jsonify(res)
 
+@app.route('/dashboard/<type>')
+def dashboard_type(type):
+
+    if type not in scenarios_def:
+        raise Error('type required')
+
+    scenarios = scenarios_def[type]
+
+    req_fields = ['event_id', 'user_id', 'attr'] \
+            + list(map(lambda str: 'scenario__' + str + '__used', scenarios)) \
+            + list(map(lambda str: 'scenario__' + str + '__attr', scenarios)) \
+
+    return jsonify(Attendee.objects(type=type).only(*req_fields))
 
 @app.route('/scenarios')
 def scenarios():
