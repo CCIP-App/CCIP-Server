@@ -1,13 +1,13 @@
 FROM python:3.7
 MAINTAINER Denny Huang
 
-COPY ./requirements.txt /requirements.txt
+COPY ./Pipfile* /
 
-RUN pip install --no-cache-dir -r /requirements.txt
+RUN pip install --no-cache-dir pipenv && pipenv install
 
 COPY ./app /app
 
 EXPOSE 5000
 WORKDIR /app
 ENV FLASK_APP ccip.py
-CMD ["/usr/local/bin/flask", "run", "--host=0.0.0.0"]
+CMD ["pipenv", "run", "flask", "run", "--host=0.0.0.0"]
