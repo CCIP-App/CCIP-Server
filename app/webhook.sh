@@ -1,5 +1,25 @@
 #!/bin/bash
 
+# This script generates another client javascript which generates a CSV by the
+# JSON config you generated (now is defined in the script) from the KKTIX
+# attendee detail page. This script also provided a web server which accepts
+# client's report of the attendee details, then import to the CCIP database.
+
+# The reporting processing is using HTTP GET method, the format is below
+#
+#     http://$server:$port/$token/$csvobject
+# 
+# The token is increasing the security of the script, preventing someone sends
+# random shit into the system. The token should only be existing on the
+# certified client.
+
+# the CSV object is a normal CSV file content with the newline replacement
+# (with 😱).
+
+# The server will dump the CSV file to a temporary file, then import it to
+# the database.
+
+
 token='I_am_the_token'
 server='[server]'
 port='8000'
