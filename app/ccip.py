@@ -303,27 +303,15 @@ def announcement():
 def dashboard():
     res = {}
     res['total'] = Attendee.objects().count()
-    res['day1checkin_used'] = Attendee.objects(scenario__day1checkin__used__ne=None).count()
+    res['checkin_used'] = Attendee.objects(scenario__checkin__used__ne=None).count()
     res['kit_used'] = Attendee.objects(scenario__kit__used__ne=None).count()
-    res['day1lunch'] = {
-        'total': Attendee.objects(Q(scenario__day1checkin__used__ne=None)).count(),
-        'meat': Attendee.objects(Q(scenario__day1checkin__attr__diet="meat") & Q(scenario__day1checkin__used__ne=None)).count(),
-        'vegetarian': Attendee.objects(Q(scenario__day1checkin__attr__diet="vegetarian") & Q(scenario__day1checkin__used__ne=None)).count()
-    }
-    res['day2checkin_used'] = Attendee.objects(scenario__day2checkin__used__ne=None).count()
-    res['day2lunch'] = {
-        'total': Attendee.objects(Q(scenario__day2checkin__used__ne=None)).count(),
-        'meat': Attendee.objects(Q(scenario__day2checkin__attr__diet="meat") & Q(scenario__day2checkin__used__ne=None)).count(),
-        'vegetarian': Attendee.objects(Q(scenario__day2checkin__attr__diet="vegetarian") & Q(scenario__day2checkin__used__ne=None)).count()
-    }
-    res['day3checkin_used'] = Attendee.objects(scenario__day3checkin__used__ne=None).count()
-    res['day3lunch'] = {
-        'total': Attendee.objects(Q(scenario__day3checkin__used__ne=None)).count(),
-        'meat': Attendee.objects(Q(scenario__day3checkin__attr__diet="meat") & Q(scenario__day3checkin__used__ne=None)).count(),
-        'vegetarian': Attendee.objects(Q(scenario__day3checkin__attr__diet="vegetarian") & Q(scenario__day3checkin__used__ne=None)).count()
+    res['lunch'] = {
+        'total': Attendee.objects(Q(scenario__checkin__used__ne=None)).count(),
+        'meat': Attendee.objects(Q(scenario__checkin__attr__diet="meat") & Q(scenario__checkin__used__ne=None)).count(),
+        'vegetarian': Attendee.objects(Q(scenario__checkin__attr__diet="vegetarian") & Q(scenario__checkin__used__ne=None)).count()
     }
     res['vipkit'] = {
-        'total': Attendee.objects(scenario__vipkit__ne=None).count(),
+        'total': Attendee.objects(scenario__vipkit__disabled=None).count(),
         'used': Attendee.objects(scenario__vipkit__used__ne=None).count()
     }
     res['logged'] = Attendee.objects().count() - Attendee.objects(first_use=None).count()
