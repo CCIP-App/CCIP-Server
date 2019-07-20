@@ -25,14 +25,14 @@ for type, filename in config.SCENARIO_DEFS.items():
 try:
     with open('puzzle-config.json', 'r') as puzzle_config_json:
         puzzle_config = json.load(puzzle_config_json)
-except:
+except IOError:
     puzzle_config = None
     app.logger.info('puzzle-config.json not found, not enable puzzle')
 
 try:
     with open('delivery-permission.json', 'r') as delivery_permission_json:
         delivery_permission = json.load(delivery_permission_json)
-except:
+except IOError:
     delivery_permission = None
     app.logger.info('delivery-permission.json not found, can not deliver puzzle')
 
@@ -326,9 +326,9 @@ def dashboard_type(type):
 
     scenarios = scenarios_def[type]
 
-    req_fields = ['event_id', 'user_id', 'attr'] \
-            + list(map(lambda str: 'scenario__' + str + '__used', scenarios)) \
-            + list(map(lambda str: 'scenario__' + str + '__attr', scenarios)) \
+    req_fields = ['event_id', 'user_id', 'attr'] + \
+        list(map(lambda str: 'scenario__' + str + '__used', scenarios)) + \
+        list(map(lambda str: 'scenario__' + str + '__attr', scenarios)) \
 
     return jsonify(Attendee.objects(type=type).only(*req_fields))
 
@@ -336,5 +336,5 @@ def dashboard_type(type):
 def scenarios():
     try:
         return jsonify(list(scenarios_def[request.args.get('type')].keys()))
-    except:
+    except KeyError:
         raise Error("type required")
