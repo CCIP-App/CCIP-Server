@@ -61,10 +61,13 @@ def deliver_puzzle(attendee, deliverer=None):
         puzzle_bucket = PuzzleBucket.init(attendee)
 
     if deliverer is not None:
-        if deliverer in puzzle_bucket.deliverer:
+        if deliverer in list(map(lambda d: d['deliverer'], puzzle_bucket.deliverer)):
             raise Error('Already take from this deliverer')
         else:
-            puzzle_bucket.deliverer.append(deliverer)
+            puzzle_bucket.deliverer.append({
+                "deliverer": deliverer,
+                "timestamp": time.time()
+            })
 
     total = PuzzleStatus.objects(puzzle='total').get().quantity
 
