@@ -248,7 +248,7 @@ def get_deliverer():
         raise Error("token required")
 
     if token in delivery_permission.keys():
-        return jsonify({'display_name': delivery_permission[token]})
+        return jsonify({'slug': delivery_permission[token]})
     else:
         raise Error("invalid token")
 
