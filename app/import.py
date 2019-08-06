@@ -62,7 +62,7 @@ def list_import(attendee_list, scenarios):
         else:
             attendee.user_id = row['id']
 
-        attendee.type = "audience"
+        attendee.role = "audience"
 
         bind_scenario(row, attendee, scenarios)
 
@@ -82,7 +82,7 @@ def staff_import(attendee_list, scenarios):
         except ValueError:
             pass
 
-        attendee.type = "speaker" if "講者" in teams else "staff"
+        attendee.role = "speaker" if "講者" in teams else "staff"
 
         attendee.attr['teams'] = teams
         attendee.attr['title'] = row['title']

@@ -21,13 +21,13 @@ class Attendee(db.Document):
     scenario = db.DictField()
     attr = db.DictField()
     first_use = db.IntField()
-    type = db.StringField()
+    role = db.StringField()
 
     meta = {
         'indexes': [
             'event_id',
             'token',
-            'type'
+            'role'
         ]
     }
 

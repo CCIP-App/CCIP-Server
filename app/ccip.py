@@ -17,9 +17,9 @@ app.config.from_pyfile('config.py')
 db.init_app(app)
 
 scenarios_def = {}
-for type, filename in config.SCENARIO_DEFS.items():
+for role, filename in config.SCENARIO_DEFS.items():
     with open(filename) as json_file:
-        scenarios_def[type] = json.load(json_file)
+        scenarios_def[role] = json.load(json_file)
 
 
 try:
@@ -172,8 +172,8 @@ def use(scenario_id):
         if scenario.disabled is not None:
             raise Error("disabled scenario")
 
-        if scenarios_def[attendee.type].get(scenario_id).get('related_scenario'):
-            for rsce in scenarios_def[attendee.type].get(scenario_id).get('related_scenario'):
+        if scenarios_def[attendee.role].get(scenario_id).get('related_scenario'):
+            for rsce in scenarios_def[attendee.role].get(scenario_id).get('related_scenario'):
                 if rsce['unlock']:
                     attendee.scenario[rsce['id']].disabled = None
 
@@ -185,8 +185,8 @@ def use(scenario_id):
                 elif request.args.get('StaffQuery') and rsce.get('staff_query_disable_message'):
                     attendee.scenario[rsce['id']].disabled = rsce['staff_query_disable_message']
 
-        if scenarios_def[attendee.type].get(scenario_id).get('deliver_puzzle') and puzzle_config is not None:
-            for i in range(scenarios_def[attendee.type].get(scenario_id).get('deliver_puzzle')):
+        if scenarios_def[attendee.role].get(scenario_id).get('deliver_puzzle') and puzzle_config is not None:
+            for i in range(scenarios_def[attendee.role].get(scenario_id).get('deliver_puzzle')):
                 deliver_puzzle(attendee)
 
         scenario.used = time.time()
@@ -321,23 +321,23 @@ def dashboard():
 
     return jsonify(res)
 
-@app.route('/dashboard/<type>')
-def dashboard_type(type):
+@app.route('/dashboard/<role>')
+def dashboard_role(role):
 
-    if type not in scenarios_def:
-        raise Error('type required')
+    if role not in scenarios_def:
+        raise Error('role required')
 
-    scenarios = scenarios_def[type]
+    scenarios = scenarios_def[role]
 
     req_fields = ['event_id', 'user_id', 'attr'] + \
         list(map(lambda str: 'scenario__' + str + '__used', scenarios)) + \
         list(map(lambda str: 'scenario__' + str + '__attr', scenarios)) \
 
-    return jsonify(Attendee.objects(type=type).only(*req_fields))
+    return jsonify(Attendee.objects(role=role).only(*req_fields))
 
 @app.route('/scenarios')
 def scenarios():
     try:
-        return jsonify(list(scenarios_def[request.args.get('type')].keys()))
+        return jsonify(list(scenarios_def[request.args.get('role')].keys()))
     except KeyError:
-        raise Error("type required")
+        raise Error("role required")
