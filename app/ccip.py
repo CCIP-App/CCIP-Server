@@ -321,6 +321,7 @@ def dashboard():
 
     return jsonify(res)
 
+
 @app.route('/dashboard/<role>')
 def dashboard_role(role):
 
@@ -334,6 +335,12 @@ def dashboard_role(role):
         list(map(lambda str: 'scenario__' + str + '__attr', scenarios)) \
 
     return jsonify(Attendee.objects(role=role).only(*req_fields))
+
+
+@app.route('/roles')
+def roles():
+    return jsonify(list(scenarios_def.keys()))
+
 
 @app.route('/scenarios')
 def scenarios():
