@@ -7,7 +7,6 @@ from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
 from models import db, Attendee, Announcement, PuzzleStatus, PuzzleBucket
-from mongoengine.queryset.visitor import Q
 from random import randint
 
 import config
@@ -302,24 +301,37 @@ def announcement():
         return jsonify({'status': 'OK'})
 
 
+def role_stats(role):
+    res = {
+        'role': role,
+        'total': Attendee.objects(role=role).count(),
+        'logged': Attendee.objects(role=role, first_use__ne=None).count(),
+        'scenarios': []
+    }
+
+    for scenario in scenarios_def[role]:
+        query_enabled_args = {
+            'role': role,
+            'scenario__{}__disabled'.format(scenario): None
+        }
+
+        query_used_args = {
+            'role': role,
+            'scenario__{}__used__ne'.format(scenario): None
+        }
+
+        res['scenarios'].append({
+            'scenario': scenario,
+            'enabled': Attendee.objects(**query_enabled_args).count(),
+            'used': Attendee.objects(**query_used_args).count()
+        })
+
+    return res
+
+
 @app.route('/dashboard')
 def dashboard():
-    res = {}
-    res['total'] = Attendee.objects().count()
-    res['checkin_used'] = Attendee.objects(scenario__checkin__used__ne=None).count()
-    res['kit_used'] = Attendee.objects(scenario__kit__used__ne=None).count()
-    res['lunch'] = {
-        'total': Attendee.objects(Q(scenario__checkin__used__ne=None)).count(),
-        'meat': Attendee.objects(Q(scenario__checkin__attr__diet="meat") & Q(scenario__checkin__used__ne=None)).count(),
-        'vegetarian': Attendee.objects(Q(scenario__checkin__attr__diet="vegetarian") & Q(scenario__checkin__used__ne=None)).count()
-    }
-    res['vipkit'] = {
-        'total': Attendee.objects(scenario__vipkit__disabled=None).count(),
-        'used': Attendee.objects(scenario__vipkit__used__ne=None).count()
-    }
-    res['logged'] = Attendee.objects().count() - Attendee.objects(first_use=None).count()
-
-    return jsonify(res)
+    return jsonify(list(map(role_stats, scenarios_def.keys())))
 
 
 @app.route('/dashboard/<role>')
