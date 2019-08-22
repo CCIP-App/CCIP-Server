@@ -98,7 +98,7 @@ def get_puzzle_bucket(request):
     try:
         puzzle_bucket = PuzzleBucket.objects(public_token=token).get()
     except DoesNotExist:
-        raise Error("invalid token")
+        raise Error("Invalid token, please try again after checkin.")
 
     return puzzle_bucket
 
