@@ -289,13 +289,25 @@ def get_puzzle_dashboard():
 @app.route('/announcement', methods=['GET', 'POST'])
 def announcement():
     if request.method == 'GET':
-        return jsonify(Announcement.objects().order_by('-_id'))
+        token = request.args.get('token')
+        role = config.ANNOUNCEMENT_DEFAULT_ROLE
+
+        if token is not None:
+            try:
+                attendee = Attendee.objects(token=token).get()
+                role = attendee.role
+            except DoesNotExist:
+                raise Error("invalid token")
+
+        return jsonify(Announcement.objects(role=role).order_by('-_id'))
+
     if request.method == 'POST':
         announcement = Announcement()
         announcement.datetime = time.time()
         announcement.msg_zh = request.form.get('msg_zh')
         announcement.msg_en = request.form.get('msg_en')
         announcement.uri = request.form.get('uri')
+        announcement.role = request.form.getlist('role[]')
         announcement.save()
 
         return jsonify({'status': 'OK'})

@@ -5,3 +5,4 @@ class Announcement(db.Document):
     msg_zh = db.StringField()
     msg_en = db.StringField()
     uri = db.StringField()
+    role = db.ListField()

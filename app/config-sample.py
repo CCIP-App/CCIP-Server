@@ -6,3 +6,5 @@ SCENARIO_DEFS = {
     "audience": "scenario.json",
     "staff": "scenario-staff.json"
 }
+
+ANNOUNCEMENT_DEFAULT_ROLE = "audience"
