@@ -249,7 +249,7 @@ def get_deliverer():
     if token in delivery_permission.keys():
         return jsonify({'slug': delivery_permission[token]})
     else:
-        raise Error("invalid token")
+        raise Error("invalid deliverer token")
 
 
 @app.route('/event/puzzle/deliverers')
