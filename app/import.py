@@ -6,9 +6,16 @@ from flask import Flask
 from models import db, Attendee, Scenario
 from datetime import datetime
 
+import config
+
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db.init_app(app)
+
+scenarios_def = {}
+for role, filename in config.SCENARIO_DEFS.items():
+    with open(filename) as json_file:
+        scenarios_def[role] = json.load(json_file)
 
 
 def str2timestamp(str):
@@ -22,7 +29,6 @@ def bind_scenario(row, attendee, scenarios):
         if scenario.get('show_rule'):
             if row[scenario.get('show_rule')['row_name']] != scenario.get('show_rule')['value_match']:
                 continue
-
 
         sce.order = scenario['order']
         sce.display_text = scenario['display_text']
@@ -57,41 +63,16 @@ def list_import(attendee_list, scenarios):
         attendee = Attendee()
         attendee.event_id = os.environ['EVENT_ID']
         attendee.token = row['token']
-        if row['id'] == '':
-            attendee.user_id = row['name']
-        else:
-            attendee.user_id = row['id']
+
+        try:
+            attendee.attr['title'] = row['title']
+        except KeyError:
+            pass
+        attendee.user_id = row['display_name']
 
         attendee.role = "audience"
 
         bind_scenario(row, attendee, scenarios)
-
-
-def staff_import(attendee_list, scenarios):
-    for row in attendee_list:
-        attendee = Attendee()
-        attendee.event_id = os.environ['EVENT_ID']
-        attendee.token = row['username']
-        attendee.user_id = row['display_name']
-        teams = row['groups'].split(',')
-
-        try:
-            teams.remove('工作人員')
-            teams.remove('組長')
-            teams.remove('股長')
-        except ValueError:
-            pass
-
-        attendee.role = "speaker" if "講者" in teams else "staff"
-
-        attendee.attr['teams'] = teams
-        attendee.attr['title'] = row['title']
-
-        bind_scenario(row, attendee, scenarios)
-
-
-def from_csv(csv_file, scenarios, staff=False):
-    list_import(csv.DictReader(csv_file), scenarios) if not staff else staff_import(csv.DictReader(csv_file), scenarios)
 
 
 if __name__ == '__main__':
@@ -104,13 +85,7 @@ if __name__ == '__main__':
         exit(1)
 
     filename = sys.argv[1]
-    scenario_filename = sys.argv[2]
+    role = sys.argv[2]
 
-    try:
-        staff = bool(sys.argv[3])
-    except IndexError:
-        staff = False
-
-    with open(filename, 'r') as csv_file, open(scenario_filename, 'r') as scenario_file:
-        scenarios = json.load(scenario_file)
-        from_csv(csv_file, scenarios, staff)
+    with open(filename, 'r') as csv_file:
+        list_import(csv.DictReader(csv_file), scenarios_def[role])
