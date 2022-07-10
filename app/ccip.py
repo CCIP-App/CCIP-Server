@@ -297,7 +297,7 @@ def announcement():
                 attendee = Attendee.objects(token=token).get()
                 role = attendee.role
             except DoesNotExist:
-                raise Error("invalid token")
+                role = config.ANNOUNCEMENT_DEFAULT_ROLE
 
         return jsonify(Announcement.objects(role=role).order_by('-_id'))
 
