@@ -273,7 +273,10 @@ def do_deliver_puzzle():
     if token in delivery_permission.keys():
         deliver_puzzle(attendee, delivery_permission[token])
         app.logger.info(delivery_permission[token] + ' ' + token + ' deliver puzzle to ' + attendee.token)
-        return jsonify({'status': 'OK'})
+        return jsonify({
+          'status': 'OK',
+          'user_id': attendee.user_id
+        })
     else:
         raise Error("invalid token")
 
