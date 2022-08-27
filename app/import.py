@@ -58,7 +58,7 @@ def bind_scenario(row, attendee, scenarios):
     attendee.save()
 
 
-def list_import(attendee_list, scenarios):
+def list_import(attendee_list, role):
     for row in attendee_list:
         attendee = Attendee()
         attendee.event_id = os.environ['EVENT_ID']
@@ -70,9 +70,9 @@ def list_import(attendee_list, scenarios):
             pass
         attendee.user_id = row['display_name']
 
-        attendee.role = "audience"
+        attendee.role = role
 
-        bind_scenario(row, attendee, scenarios)
+        bind_scenario(row, attendee, scenarios_def[role])
 
 
 if __name__ == '__main__':
@@ -88,4 +88,4 @@ if __name__ == '__main__':
     role = sys.argv[2]
 
     with open(filename, 'r') as csv_file:
-        list_import(csv.DictReader(csv_file), scenarios_def[role])
+        list_import(csv.DictReader(csv_file), role)
