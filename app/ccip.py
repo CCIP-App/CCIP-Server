@@ -302,7 +302,7 @@ def announcement():
             except DoesNotExist:
                 role = config.ANNOUNCEMENT_DEFAULT_ROLE
 
-        return jsonify(Announcement.objects(role=role).order_by('-_id'))
+        return jsonify(Announcement.objects(role__in=[role]).order_by('-_id'))
 
     if request.method == 'POST':
         announcement = Announcement()
