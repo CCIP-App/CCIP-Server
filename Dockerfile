@@ -1,11 +1,11 @@
 FROM python:3.10
 
-COPY ./Pipfile* /
+COPY ./pyproject.toml /
 
-RUN pip install --no-cache-dir pipenv && pipenv install
+RUN curl -sSL https://install.python-poetry.org | python3 - && /root/.local/bin/poetry install
 
 COPY ./app /app
 
 EXPOSE 5000
 WORKDIR /app
-ENTRYPOINT ["pipenv","run","waitress-serve", "--port=5000", "ccip:app"]
+ENTRYPOINT ["/root/.local/bin/poetry","run","waitress-serve", "--port=5000", "ccip:app"]
