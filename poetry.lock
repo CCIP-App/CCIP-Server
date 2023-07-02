@@ -46,21 +46,6 @@ trio = ["trio (>=0.14,<0.23)"]
 wmi = ["wmi (>=1.5.1,<2.0.0)"]
 
 [[package]]
-name = "email-validator"
-version = "2.0.0.post2"
-description = "A robust email address syntax and deliverability validation library."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "email_validator-2.0.0.post2-py3-none-any.whl", hash = "sha256:2466ba57cda361fb7309fd3d5a225723c788ca4bbad32a0ebd5373b99730285c"},
-    {file = "email_validator-2.0.0.post2.tar.gz", hash = "sha256:1ff6e86044200c56ae23595695c54e9614f4a9551e0e393614f764860b3d7900"},
-]
-
-[package.dependencies]
-dnspython = ">=2.0.0"
-idna = ">=2.0.0"
-
-[[package]]
 name = "flake8"
 version = "6.0.0"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -96,53 +81,6 @@ Werkzeug = ">=2.2.2"
 [package.extras]
 async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
-
-[[package]]
-name = "flask-mongoengine"
-version = "1.0.0"
-description = "Flask-MongoEngine is a Flask extension that provides integration with MongoEngine and WTF model forms."
-optional = false
-python-versions = "*"
-files = [
-    {file = "flask-mongoengine-1.0.0.tar.gz", hash = "sha256:ce68726d2be8d88006e88f17e4be3b7ad07c79ca8dedb60653d3dab5d9485840"},
-    {file = "flask_mongoengine-1.0.0-py3-none-any.whl", hash = "sha256:2db13140ce7f61a935e75268190450d5ecc9b60a7310fd289f9511835aa105d4"},
-]
-
-[package.dependencies]
-Flask = ">=1.1.2"
-Flask-WTF = ">=0.14.3"
-mongoengine = ">=0.20"
-WTForms = {version = ">=2.3.1", extras = ["email"]}
-
-[[package]]
-name = "flask-wtf"
-version = "1.1.1"
-description = "Form rendering, validation, and CSRF protection for Flask with WTForms."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "Flask-WTF-1.1.1.tar.gz", hash = "sha256:41c4244e9ae626d63bed42ae4785b90667b885b1535d5a4095e1f63060d12aa9"},
-    {file = "Flask_WTF-1.1.1-py3-none-any.whl", hash = "sha256:7887d6f1ebb3e17bf648647422f0944c9a469d0fcf63e3b66fb9a83037e38b2c"},
-]
-
-[package.dependencies]
-Flask = "*"
-itsdangerous = "*"
-WTForms = "*"
-
-[package.extras]
-email = ["email-validator"]
-
-[[package]]
-name = "idna"
-version = "3.4"
-description = "Internationalized Domain Names in Applications (IDNA)"
-optional = false
-python-versions = ">=3.5"
-files = [
-    {file = "idna-3.4-py3-none-any.whl", hash = "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"},
-    {file = "idna-3.4.tar.gz", hash = "sha256:814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4"},
-]
 
 [[package]]
 name = "itsdangerous"
@@ -404,25 +342,7 @@ MarkupSafe = ">=2.1.1"
 [package.extras]
 watchdog = ["watchdog (>=2.3)"]
 
-[[package]]
-name = "wtforms"
-version = "3.0.1"
-description = "Form validation and rendering for Python web development."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "WTForms-3.0.1-py3-none-any.whl", hash = "sha256:837f2f0e0ca79481b92884962b914eba4e72b7a2daaf1f939c890ed0124b834b"},
-    {file = "WTForms-3.0.1.tar.gz", hash = "sha256:6b351bbb12dd58af57ffef05bc78425d08d1914e0fd68ee14143b7ade023c5bc"},
-]
-
-[package.dependencies]
-email-validator = {version = "*", optional = true, markers = "extra == \"email\""}
-MarkupSafe = "*"
-
-[package.extras]
-email = ["email-validator"]
-
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8e72b94adb6f9b18ea2e2814da04253d6fc432e7d8f00396f4773d8a82ac7253"
+content-hash = "f643a4fa0d152e63dfe96bc7e042dca8f51efa76bd1ea898103f3c31d7b821a7"

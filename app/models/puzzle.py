@@ -1,6 +1,6 @@
 from mongoengine import NotUniqueError
 
-from models import db
+import mongoengine as db
 from models import Attendee
 
 

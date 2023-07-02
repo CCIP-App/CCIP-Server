@@ -6,14 +6,13 @@ from error import Error
 from flask import Flask, Response, request, jsonify
 from mongoengine.queryset import DoesNotExist
 from functools import wraps
-from models import db, Attendee, Announcement, PuzzleStatus, PuzzleBucket
+from models import Attendee, Announcement, PuzzleStatus, PuzzleBucket
 from random import randint
 
 import config
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-db.init_app(app)
 
 scenarios_def = {}
 for role, filename in config.SCENARIO_DEFS.items():

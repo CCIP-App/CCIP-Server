@@ -1,4 +1,5 @@
-from models import db
+import mongoengine as db
+
 
 class Announcement(db.Document):
     datetime = db.IntField()

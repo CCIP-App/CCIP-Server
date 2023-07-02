@@ -1,5 +1,5 @@
 import bson
-from models import db
+import mongoengine as db
 from hashlib import sha1
 
 
