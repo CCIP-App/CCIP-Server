@@ -10,7 +10,6 @@ import config
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-db.init_app(app)
 
 scenarios_def = {}
 for role, filename in config.SCENARIO_DEFS.items():
