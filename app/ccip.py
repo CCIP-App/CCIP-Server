@@ -360,7 +360,7 @@ def dashboard_role(role):
         list(map(lambda str: 'scenario__' + str + '__used', scenarios)) + \
         list(map(lambda str: 'scenario__' + str + '__attr', scenarios)) \
 
-    return jsonify(Attendee.objects(role=role).only(*req_fields))
+    return Attendee.objects(role=role).only(*req_fields).to_json()
 
 
 @app.route('/roles')
