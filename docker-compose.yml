@@ -1,0 +1,8 @@
+services:
+  backend:
+    container_name: ccip_server
+    image: ccip-app/ccip-server:latest
+    ports:
+      - 5000:5000
+    # volumes:
+      # - ./docker-entrypoint.sh:/app/docker-entrypoint.sh
