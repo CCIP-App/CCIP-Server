@@ -133,6 +133,7 @@ def handle_error(error):
 
 
 @app.route('/landing')
+@returns_json
 def landing():
     attendee = get_attendee(request)
 
@@ -196,6 +197,7 @@ def use(scenario_id):
 
 
 @app.route('/event/puzzle')
+@returns_json
 def get_puzzle():
     puzzle_bucket = get_puzzle_bucket(request)
 
@@ -209,6 +211,7 @@ def get_puzzle():
 
 
 @app.route('/event/puzzle/revoke')
+@returns_json
 def revoke_puzzle():
     attendee = get_attendee(request)
 
@@ -227,6 +230,7 @@ def revoke_puzzle():
 
 
 @app.route('/event/puzzle/coupon')
+@returns_json
 def use_coupon():
     attendee = get_attendee(request)
 
@@ -239,6 +243,7 @@ def use_coupon():
 
 
 @app.route('/event/puzzle/deliverer')
+@returns_json
 def get_deliverer():
     token = request.args.get('token')
 
@@ -252,11 +257,13 @@ def get_deliverer():
 
 
 @app.route('/event/puzzle/deliverers')
+@returns_json
 def get_deliverers():
     return jsonify(list(delivery_permission.values()))
 
 
 @app.route('/event/puzzle/deliver', methods=['POST'])
+@returns_json
 def do_deliver_puzzle():
     token = request.args.get('token')
     receiver = request.form.get('receiver')
@@ -289,6 +296,7 @@ def get_puzzle_dashboard():
 
 
 @app.route('/announcement', methods=['GET', 'POST'])
+@returns_json
 def announcement():
     if request.method == 'GET':
         token = request.args.get('token')
@@ -344,11 +352,13 @@ def role_stats(role):
 
 
 @app.route('/dashboard')
+@returns_json
 def dashboard():
     return jsonify(list(map(role_stats, scenarios_def.keys())))
 
 
 @app.route('/dashboard/<role>')
+@returns_json
 def dashboard_role(role):
 
     if role not in scenarios_def:
