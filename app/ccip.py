@@ -80,12 +80,24 @@ def deliver_puzzle(attendee, deliverer=None):
     puzzle_bucket.save()
 
 
-def returns_json(f):
+def returns_json(f, content_type='application/json; charset=utf-8'):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
-        r = f(*args, **kwargs)
-        return Response(r, content_type='application/json; charset=utf-8')
-    return decorated_function
+    def wrapper(*args, **kwargs):
+        try:
+            result = f(*args, **kwargs)
+            if isinstance(result, app.response_class):
+                result.content_type = content_type
+                return result
+            response = jsonify(result)
+            response.content_type = content_type
+            return response
+        except Error as e:
+            response = jsonify(e.to_dict())
+            response.content_type = content_type
+            return response, e.status_code
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    return wrapper
 
 
 def get_puzzle_bucket(request):
