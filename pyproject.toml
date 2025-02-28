@@ -7,10 +7,10 @@ license = "AGPL-3.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-mongoengine = "^0.28.2"
-Flask = "^3.0.3"
-waitress = "^3.0.0"
+python = "^3.12"
+mongoengine = "^0.29.1"
+Flask = "^3.1.0"
+waitress = "^3.0.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.0.0"
