@@ -1,4 +1,5 @@
 [tool.poetry]
+package-mode = false
 name = "ccip-server"
 version = "1.0.0"
 description = ""
