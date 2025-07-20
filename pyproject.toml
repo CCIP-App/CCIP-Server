@@ -1,21 +1,18 @@
-[tool.poetry]
-package-mode = false
+[project]
 name = "ccip-server"
 version = "1.0.0"
 description = ""
 authors = ["OPass Dev Team <dev@opass.app>"]
 license = "AGPL-3.0"
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.1.1",
+    "mongoengine>=0.29.1",
+    "waitress>=3.0.2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-mongoengine = "^0.29.1"
-Flask = "^3.1.0"
-waitress = "^3.0.2"
-
-[tool.poetry.group.dev.dependencies]
-flake8 = "^6.0.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "flake8>=7.3.0",
+]
