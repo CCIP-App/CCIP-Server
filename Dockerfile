@@ -6,6 +6,8 @@ COPY ./pyproject.toml /
 COPY ./app /app
 COPY ./docker-entrypoint.sh /app/docker-entrypoint.sh
 
-EXPOSE 5000
+ENV PORT 5000
+EXPOSE $PORT
+
 WORKDIR /app
 ENTRYPOINT ["bash", "docker-entrypoint.sh"]
