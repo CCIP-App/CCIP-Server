@@ -7,7 +7,7 @@ license = "AGPL-3.0"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "flask>=3.1.1",
+    "flask>=3.1.2",
     "mongoengine>=0.29.1",
     "waitress>=3.0.2",
 ]
