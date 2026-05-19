@@ -28,7 +28,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "flask", specifier = ">=3.1.1" },
+    { name = "flask", specifier = ">=3.1.2" },
     { name = "mongoengine", specifier = ">=0.29.1" },
     { name = "waitress", specifier = ">=3.0.2" },
 ]
