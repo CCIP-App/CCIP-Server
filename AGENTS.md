@@ -131,9 +131,16 @@ Announcements and dashboards:
 Use the repository's `uv` setup for Python work:
 
 ```bash
-uv sync
-uv run flake8 app
+uv sync --locked --all-groups
+uv run ruff check app
+uv run ruff format --check app
+uv run python -m compileall app
+uv run pre-commit run --all-files
 ```
+
+Ruff is the Python lint and format tool for this repo. The pre-commit hooks run
+`ruff check --fix` and `ruff format`, so local commits should auto-fix routine
+import ordering and formatting issues.
 
 Run the service the same way the README describes:
 
@@ -176,6 +183,8 @@ EVENT_ID=<event-id> uv run python import.py staff.csv staff
 - Treat query parameter names and form field names as public contracts.
 - When touching token or attendee flows, distinguish private attendee `token`,
   public SHA-1 `public_token`, and deliverer permission token.
+- GitHub Actions runs the same quality gate on pull requests and pushes to
+  `master`: locked uv sync, Ruff lint, Ruff format check, and `compileall`.
 - If you add tests later, prefer focused Flask test-client coverage around
   route behavior and MongoEngine model state. Consider `mongomock` or a test
   MongoDB fixture instead of real event data.
@@ -188,7 +197,15 @@ EVENT_ID=<event-id> uv run python import.py staff.csv staff
 At minimum, run the cheapest applicable validation:
 
 ```bash
-uv run flake8 app
+uv run ruff check app
+uv run ruff format --check app
+```
+
+Before committing, prefer the full local gate:
+
+```bash
+uv run pre-commit run --all-files
+uv run python -m compileall app
 ```
 
 If you touched Docker, run or explicitly report why you could not run:
