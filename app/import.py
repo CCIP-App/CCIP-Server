@@ -3,10 +3,9 @@ import json
 import os
 from datetime import datetime
 
+import config
 from flask import Flask
 from models import Attendee, Scenario
-
-import config
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -51,10 +50,7 @@ def bind_scenario(row, attendee, scenarios):
 
         if scenario.get('not_lock_rule'):
             not_lock_rule = scenario.get('not_lock_rule')
-            if (
-                row[not_lock_rule['row_name']]
-                == not_lock_rule['value_match']
-            ):
+            if row[not_lock_rule['row_name']] == not_lock_rule['value_match']:
                 sce.disabled = None
             else:
                 sce.disabled = not_lock_rule['not_match_disable_message']

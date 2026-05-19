@@ -1,15 +1,14 @@
-import time
 import json
-
+import time
 from datetime import datetime
-from error import Error
-from flask import Flask, Response, request, jsonify
-from mongoengine.queryset import DoesNotExist
 from functools import wraps
-from models import Attendee, Announcement, PuzzleStatus, PuzzleBucket
 from random import randint
 
 import config
+from error import Error
+from flask import Flask, Response, jsonify, request
+from models import Announcement, Attendee, PuzzleBucket, PuzzleStatus
+from mongoengine.queryset import DoesNotExist
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -67,10 +66,9 @@ def deliver_puzzle(attendee, deliverer=None):
         if deliverer in deliverers:
             raise Error('Already take from this deliverer')
         else:
-            puzzle_bucket.deliverer.append({
-                "deliverer": deliverer,
-                "timestamp": time.time()
-            })
+            puzzle_bucket.deliverer.append(
+                {"deliverer": deliverer, "timestamp": time.time()}
+            )
 
     total = PuzzleStatus.objects(puzzle='total').get().quantity
 
@@ -78,20 +76,18 @@ def deliver_puzzle(attendee, deliverer=None):
         puzzle = list(puzzle_config.keys())[randint(0, len(puzzle_config) - 1)]
         should_deliver = i == len(puzzle_config) - 1 or total == 0
         if not should_deliver:
-            current_rate = PuzzleStatus.objects(
-                puzzle=puzzle
-            ).get().currency / total
+            current_rate = (
+                PuzzleStatus.objects(puzzle=puzzle).get().currency / total
+            )
             should_deliver = current_rate < puzzle_rate[puzzle]
 
         if should_deliver:
             puzzle_bucket.puzzle.append(puzzle)
             PuzzleStatus.objects(puzzle='total').update_one(
-                inc__quantity=1,
-                inc__currency=1
+                inc__quantity=1, inc__currency=1
             )
             PuzzleStatus.objects(puzzle=puzzle).update_one(
-                inc__quantity=1,
-                inc__currency=1
+                inc__quantity=1, inc__currency=1
             )
             break
 
@@ -103,6 +99,7 @@ def returns_json(f):
     def decorated_function(*args, **kwargs):
         r = f(*args, **kwargs)
         return Response(r, content_type='application/json; charset=utf-8')
+
     return decorated_function
 
 
@@ -211,21 +208,20 @@ def use(scenario_id):
                 disable_time = rsce.get('disable_time')
                 if (
                     disable_time
-                    and time.time() > datetime.strptime(
-                        disable_time,
-                        "%Y/%m/%d %H:%M %z"
+                    and time.time()
+                    > datetime.strptime(
+                        disable_time, "%Y/%m/%d %H:%M %z"
                     ).timestamp()
                 ):
-                    attendee.scenario[rsce['id']].disabled = (
-                        rsce['disable_message']
-                    )
-                elif (
-                    is_staff_query
-                    and rsce.get('staff_query_disable_message')
+                    attendee.scenario[rsce['id']].disabled = rsce[
+                        'disable_message'
+                    ]
+                elif is_staff_query and rsce.get(
+                    'staff_query_disable_message'
                 ):
-                    attendee.scenario[rsce['id']].disabled = (
-                        rsce['staff_query_disable_message']
-                    )
+                    attendee.scenario[rsce['id']].disabled = rsce[
+                        'staff_query_disable_message'
+                    ]
 
         if scenario_def.get('deliver_puzzle') and puzzle_config is not None:
             for i in range(scenario_def.get('deliver_puzzle')):
@@ -243,13 +239,15 @@ def use(scenario_id):
 def get_puzzle():
     puzzle_bucket = get_puzzle_bucket(request)
 
-    return jsonify({
-        "user_id": puzzle_bucket.attendee.user_id,
-        "puzzles": puzzle_bucket.puzzle,
-        "deliverers": puzzle_bucket.deliverer,
-        "valid": puzzle_bucket.valid,
-        "coupon": puzzle_bucket.coupon
-    })
+    return jsonify(
+        {
+            "user_id": puzzle_bucket.attendee.user_id,
+            "puzzles": puzzle_bucket.puzzle,
+            "deliverers": puzzle_bucket.deliverer,
+            "valid": puzzle_bucket.valid,
+            "coupon": puzzle_bucket.coupon,
+        }
+    )
 
 
 @app.route('/event/puzzle/revoke')
@@ -324,10 +322,7 @@ def do_deliver_puzzle():
             + ' deliver puzzle to '
             + attendee.token
         )
-        return jsonify({
-          'status': 'OK',
-          'user_id': attendee.user_id
-        })
+        return jsonify({'status': 'OK', 'user_id': attendee.user_id})
     else:
         raise Error("invalid token")
 
@@ -372,25 +367,27 @@ def role_stats(role):
         'role': role,
         'total': Attendee.objects(role=role).count(),
         'logged': Attendee.objects(role=role, first_use__ne=None).count(),
-        'scenarios': []
+        'scenarios': [],
     }
 
     for scenario in scenarios_def[role]:
         query_enabled_args = {
             'role': role,
-            'scenario__{}__disabled'.format(scenario): None
+            'scenario__{}__disabled'.format(scenario): None,
         }
 
         query_used_args = {
             'role': role,
-            'scenario__{}__used__ne'.format(scenario): None
+            'scenario__{}__used__ne'.format(scenario): None,
         }
 
-        res['scenarios'].append({
-            'scenario': scenario,
-            'enabled': Attendee.objects(**query_enabled_args).count(),
-            'used': Attendee.objects(**query_used_args).count()
-        })
+        res['scenarios'].append(
+            {
+                'scenario': scenario,
+                'enabled': Attendee.objects(**query_enabled_args).count(),
+                'used': Attendee.objects(**query_used_args).count(),
+            }
+        )
 
     return res
 
@@ -408,10 +405,11 @@ def dashboard_role(role):
 
     scenarios = scenarios_def[role]
 
-    req_fields = ['event_id', 'user_id', 'attr'] + \
-        list(map(lambda str: 'scenario__' + str + '__used', scenarios)) + \
-        list(map(lambda str: 'scenario__' + str + '__attr', scenarios)) \
-
+    req_fields = (
+        ['event_id', 'user_id', 'attr']
+        + list(map(lambda str: 'scenario__' + str + '__used', scenarios))
+        + list(map(lambda str: 'scenario__' + str + '__attr', scenarios))
+    )
     return Attendee.objects(role=role).only(*req_fields).to_json()
 
 

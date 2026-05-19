@@ -1,6 +1,7 @@
+from hashlib import sha1
+
 import bson
 import mongoengine as db
-from hashlib import sha1
 
 
 class Scenario(db.EmbeddedDocument):
@@ -23,13 +24,7 @@ class Attendee(db.Document):
     first_use = db.IntField()
     role = db.StringField()
 
-    meta = {
-        'indexes': [
-            'event_id',
-            'token',
-            'role'
-        ]
-    }
+    meta = {'indexes': ['event_id', 'token', 'role']}
 
     @property
     def public_token(self):

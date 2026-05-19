@@ -1,6 +1,6 @@
+import mongoengine as db
 from mongoengine import NotUniqueError
 
-import mongoengine as db
 from models import Attendee
 
 
@@ -9,11 +9,7 @@ class PuzzleStatus(db.Document):
     quantity = db.IntField(default=0)
     currency = db.IntField(default=0)
 
-    meta = {
-        'indexes': [
-            'puzzle'
-        ]
-    }
+    meta = {'indexes': ['puzzle']}
 
 
 class PuzzleBucket(db.Document):
@@ -24,18 +20,13 @@ class PuzzleBucket(db.Document):
     coupon = db.IntField()
     deliverer = db.ListField()
 
-    meta = {
-        'indexes': [
-            'public_token'
-        ]
-    }
+    meta = {'indexes': ['public_token']}
 
     @classmethod
     def init(cls, attendee):
         try:
             return PuzzleBucket.objects.create(
-                attendee=attendee,
-                public_token=attendee.public_token
+                attendee=attendee, public_token=attendee.public_token
             )
         except NotUniqueError:
             return PuzzleBucket.objects(
