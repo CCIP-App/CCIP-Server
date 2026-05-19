@@ -1,10 +1,10 @@
 import csv
 import json
 import os
+from datetime import datetime
 
 from flask import Flask
-from models import db, Attendee, Scenario
-from datetime import datetime
+from models import Attendee, Scenario
 
 import config
 
@@ -26,7 +26,8 @@ def bind_scenario(row, attendee, scenarios):
         sce = Scenario()
 
         if scenario.get('show_rule'):
-            if row[scenario.get('show_rule')['row_name']] != scenario.get('show_rule')['value_match']:
+            show_rule = scenario.get('show_rule')
+            if row[show_rule['row_name']] != show_rule['value_match']:
                 continue
 
         sce.order = scenario['order']
@@ -44,13 +45,19 @@ def bind_scenario(row, attendee, scenarios):
                     sce.attr[attr['attr_name']] = row[attr['row_name']]
 
                 else:
-                    sce.attr[attr['attr_name']] = attr.get('value')[row[attr['row_name']]]
+                    sce.attr[attr['attr_name']] = attr.get('value')[
+                        row[attr['row_name']]
+                    ]
 
         if scenario.get('not_lock_rule'):
-            if row[scenario.get('not_lock_rule')['row_name']] == scenario.get('not_lock_rule')['value_match']:
+            not_lock_rule = scenario.get('not_lock_rule')
+            if (
+                row[not_lock_rule['row_name']]
+                == not_lock_rule['value_match']
+            ):
                 sce.disabled = None
             else:
-                sce.disabled = scenario.get('not_lock_rule')['not_match_disable_message']
+                sce.disabled = not_lock_rule['not_match_disable_message']
 
         attendee.scenario[scenario_id] = sce
 

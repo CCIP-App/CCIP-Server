@@ -33,6 +33,11 @@ class PuzzleBucket(db.Document):
     @classmethod
     def init(cls, attendee):
         try:
-            return PuzzleBucket.objects.create(attendee=attendee, public_token=attendee.public_token)
+            return PuzzleBucket.objects.create(
+                attendee=attendee,
+                public_token=attendee.public_token
+            )
         except NotUniqueError:
-            return PuzzleBucket.objects(public_token=attendee.public_token).get()
+            return PuzzleBucket.objects(
+                public_token=attendee.public_token
+            ).get()

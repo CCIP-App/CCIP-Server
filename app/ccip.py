@@ -32,10 +32,12 @@ try:
         delivery_permission = json.load(delivery_permission_json)
 except IOError:
     delivery_permission = None
-    app.logger.info('delivery-permission.json not found, can not deliver puzzle')
+    app.logger.info(
+        'delivery-permission.json not found, can not deliver puzzle'
+    )
 
 if puzzle_config is not None:
-    puzzle_status_init = True if (PuzzleStatus.objects.count() == 0) else False
+    puzzle_status_init = PuzzleStatus.objects.count() == 0
 
     base = 0
     for k, v in puzzle_config.items():
@@ -54,12 +56,15 @@ if puzzle_config is not None:
 
 def deliver_puzzle(attendee, deliverer=None):
     try:
-        puzzle_bucket = PuzzleBucket.objects(public_token=attendee.public_token).get()
+        puzzle_bucket = PuzzleBucket.objects(
+            public_token=attendee.public_token
+        ).get()
     except DoesNotExist:
         puzzle_bucket = PuzzleBucket.init(attendee)
 
     if deliverer is not None:
-        if deliverer in list(map(lambda d: d['deliverer'], puzzle_bucket.deliverer)):
+        deliverers = [d['deliverer'] for d in puzzle_bucket.deliverer]
+        if deliverer in deliverers:
             raise Error('Already take from this deliverer')
         else:
             puzzle_bucket.deliverer.append({
@@ -71,10 +76,23 @@ def deliver_puzzle(attendee, deliverer=None):
 
     for i in range(len(puzzle_config)):
         puzzle = list(puzzle_config.keys())[randint(0, len(puzzle_config) - 1)]
-        if i == len(puzzle_config) - 1 or total == 0 or PuzzleStatus.objects(puzzle=puzzle).get().currency / total < puzzle_rate[puzzle]:
+        should_deliver = i == len(puzzle_config) - 1 or total == 0
+        if not should_deliver:
+            current_rate = PuzzleStatus.objects(
+                puzzle=puzzle
+            ).get().currency / total
+            should_deliver = current_rate < puzzle_rate[puzzle]
+
+        if should_deliver:
             puzzle_bucket.puzzle.append(puzzle)
-            PuzzleStatus.objects(puzzle='total').update_one(inc__quantity=1, inc__currency=1)
-            PuzzleStatus.objects(puzzle=puzzle).update_one(inc__quantity=1, inc__currency=1)
+            PuzzleStatus.objects(puzzle='total').update_one(
+                inc__quantity=1,
+                inc__currency=1
+            )
+            PuzzleStatus.objects(puzzle=puzzle).update_one(
+                inc__quantity=1,
+                inc__currency=1
+            )
             break
 
     puzzle_bucket.save()
@@ -104,7 +122,9 @@ def get_puzzle_bucket(request):
 
 def get_puzzle_bucket_by_attendee(attendee):
     try:
-        puzzle_bucket = PuzzleBucket.objects(public_token=attendee.public_token).get()
+        puzzle_bucket = PuzzleBucket.objects(
+            public_token=attendee.public_token
+        ).get()
     except DoesNotExist:
         raise Error("invalid token")
 
@@ -157,34 +177,58 @@ def status():
 @returns_json
 def use(scenario_id):
     attendee = get_attendee(request)
+    is_staff_query = request.args.get('StaffQuery')
 
     try:
         scenario = attendee.scenario[scenario_id]
     except KeyError:
         raise Error("invalid scenario_id")
 
-    if scenario.available_time <= time.time() and scenario.expire_time > time.time():
+    scenario_def = scenarios_def[attendee.role].get(scenario_id)
+
+    if (
+        scenario.available_time <= time.time()
+        and scenario.expire_time > time.time()
+    ):
         if scenario.used is not None:
             raise Error("has been used")
 
         if scenario.disabled is not None:
             raise Error("disabled scenario")
 
-        if scenarios_def[attendee.role].get(scenario_id).get('related_scenario'):
-            for rsce in scenarios_def[attendee.role].get(scenario_id).get('related_scenario'):
+        if scenario_def.get('related_scenario'):
+            for rsce in scenario_def.get('related_scenario'):
                 if rsce['unlock']:
                     attendee.scenario[rsce['id']].disabled = None
 
-                if request.args.get('StaffQuery') and rsce.get('staff_query_used') and attendee.scenario[rsce['id']].used is None:
+                if (
+                    is_staff_query
+                    and rsce.get('staff_query_used')
+                    and attendee.scenario[rsce['id']].used is None
+                ):
                     attendee.scenario[rsce['id']].used = time.time()
 
-                if rsce.get('disable_time') and time.time() > datetime.strptime(rsce['disable_time'], "%Y/%m/%d %H:%M %z").timestamp():
-                    attendee.scenario[rsce['id']].disabled = rsce['disable_message']
-                elif request.args.get('StaffQuery') and rsce.get('staff_query_disable_message'):
-                    attendee.scenario[rsce['id']].disabled = rsce['staff_query_disable_message']
+                disable_time = rsce.get('disable_time')
+                if (
+                    disable_time
+                    and time.time() > datetime.strptime(
+                        disable_time,
+                        "%Y/%m/%d %H:%M %z"
+                    ).timestamp()
+                ):
+                    attendee.scenario[rsce['id']].disabled = (
+                        rsce['disable_message']
+                    )
+                elif (
+                    is_staff_query
+                    and rsce.get('staff_query_disable_message')
+                ):
+                    attendee.scenario[rsce['id']].disabled = (
+                        rsce['staff_query_disable_message']
+                    )
 
-        if scenarios_def[attendee.role].get(scenario_id).get('deliver_puzzle') and puzzle_config is not None:
-            for i in range(scenarios_def[attendee.role].get(scenario_id).get('deliver_puzzle')):
+        if scenario_def.get('deliver_puzzle') and puzzle_config is not None:
+            for i in range(scenario_def.get('deliver_puzzle')):
                 deliver_puzzle(attendee)
 
         scenario.used = time.time()
@@ -214,7 +258,9 @@ def revoke_puzzle():
 
     puzzle_bucket = get_puzzle_bucket_by_attendee(attendee)
 
-    PuzzleStatus.objects(puzzle='total').update_one(dec__currency=len(puzzle_bucket.puzzle))
+    PuzzleStatus.objects(puzzle='total').update_one(
+        dec__currency=len(puzzle_bucket.puzzle)
+    )
     for puzzle in puzzle_bucket.puzzle:
         PuzzleStatus.objects(puzzle=puzzle).update_one(dec__currency=1)
 
@@ -271,7 +317,13 @@ def do_deliver_puzzle():
 
     if token in delivery_permission.keys():
         deliver_puzzle(attendee, delivery_permission[token])
-        app.logger.info(delivery_permission[token] + ' ' + token + ' deliver puzzle to ' + attendee.token)
+        app.logger.info(
+            delivery_permission[token]
+            + ' '
+            + token
+            + ' deliver puzzle to '
+            + attendee.token
+        )
         return jsonify({
           'status': 'OK',
           'user_id': attendee.user_id

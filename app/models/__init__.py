@@ -1,9 +1,16 @@
+import config
 from mongoengine import connect
 
-import config
+from models.attendee import Attendee, Scenario
+from models.announcement import Announcement
+from models.puzzle import PuzzleBucket, PuzzleStatus
 
 connect(**config.MONGODB_SETTINGS)
 
-from models.attendee import *
-from models.announcement import *
-from models.puzzle import *
+__all__ = [
+    'Announcement',
+    'Attendee',
+    'PuzzleBucket',
+    'PuzzleStatus',
+    'Scenario',
+]
